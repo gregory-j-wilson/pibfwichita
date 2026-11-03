@@ -1,0 +1,376 @@
+/* Primera Iglesia Bautista Fundamental de Wichita — site styles */
+:root {
+  --blue: #0813ad;
+  --navy: #000049;
+  --red: #bc1818;
+  --pink: #f9d6d6;
+  --sky: #e3f0fb;
+  --text: #666;
+  --footer-muted: #769fc1;
+  --footer-link: #3e86c1;
+  --sans: 'Roboto', Helvetica, Arial, sans-serif;
+  --body: 'Open Sans', Arial, sans-serif;
+  --serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --container: min(80%, 1080px);
+  --glow: 0 0 8px #fff, 0 0 8px #fff, 0 0 8px #fff, 0 0 8px #fff;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+  color: var(--text);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+/* Fixed background texture (pseudo-element so it also works on iPhone/iPad) */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -1;
+  background: url("../img/white-flag-texture.jpg") center / cover no-repeat;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--blue); }
+h1, h2, h3, h4 { font-family: var(--sans); font-weight: 500; color: var(--navy); line-height: 1.2; margin: 0 0 .5em; }
+h1 { font-size: 30px; }
+h2 { font-size: 26px; }
+h3 { font-size: 22px; }
+h4 { font-size: 18px; }
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+
+.container { width: var(--container); margin-inline: auto; }
+.section { padding: 54px 0; }
+.center { text-align: center; }
+.skip-link { position: absolute; left: -9999px; }
+.skip-link:focus { left: 16px; top: 16px; z-index: 100; background: #fff; padding: 8px 12px; }
+
+/* ---------- Header ---------- */
+.site-header { padding-top: 38px; }
+.site-logo { display: block; width: 500px; max-width: 100%; margin: 0 auto 13px; }
+.site-logo img { width: 100%; }
+.header-rule { border: 0; border-top: 2px solid var(--blue); margin: 0; }
+.main-nav {
+  width: 75%;
+  margin: -1px auto 0;
+  padding: 10px 20px;
+  background: rgba(10, 9, 9, .08);
+  border-radius: 0 0 120px 120px;
+}
+.main-nav ul {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0 22px;
+}
+.main-nav a {
+  display: block;
+  padding: 3px 0;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--blue);
+  text-decoration: none;
+}
+.main-nav a:hover { opacity: .7; }
+.main-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+.nav-toggle { display: none; }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--blue); color: #fff; padding: 16px 0 9px; border-top: 0; }
+.footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 30px; padding: 32px 0; }
+.footer-cross { width: 110px; margin-inline: auto; border-radius: 18px; background: #fff; }
+.footer-info { text-align: center; font-family: var(--sans); font-size: 17px; line-height: 1.45; }
+.footer-info h2 { color: #fff; font-family: var(--sans); font-size: 22px; font-weight: 400; margin: 0 0 .5em; line-height: 1.1; }
+.footer-info a { color: #fff; font-weight: 700; }
+.footer-cta { display: flex; justify-content: center; }
+.site-subfooter { background: var(--navy); padding: 13px 0; font-family: var(--sans); font-size: 14px; }
+.subfooter-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--footer-muted); }
+.subfooter-row p { margin: 0; }
+.subfooter-row a { color: var(--footer-link); }
+.subfooter-row .right { color: #5996c1; }
+.subfooter-row .right a:first-child { text-decoration: none; font-weight: 700; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: .4em;
+  padding: .3em .8em;
+  background: #fff;
+  color: var(--navy);
+  font-family: var(--sans);
+  font-size: 20px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 2px solid #fff;
+  border-radius: 3px;
+  transition: background .3s, color .3s;
+}
+.btn:hover { background: rgba(255, 255, 255, .85); }
+.btn-bold { font-weight: 700; }
+.btn svg { width: 1em; height: 1em; flex: none; }
+
+/* ---------- Home ---------- */
+.welcome { padding: 52px 0 39px; }
+.welcome-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5%; }
+.welcome-photo, .welcome-title {
+  border: 1px solid var(--navy);
+  border-radius: 5px;
+  background: var(--sky);
+  overflow: hidden;
+}
+.welcome-photo img { width: 100%; aspect-ratio: 700 / 394; object-fit: cover; }
+.welcome-photo p {
+  margin: 0; padding: 8px 20px;
+  text-align: center; font-weight: 600; color: var(--navy);
+  font-size: 13px;
+}
+.welcome-title {
+  display: flex; align-items: center; justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+.welcome-title h1 { font-size: 30px; font-weight: 400; color: var(--navy); margin: 0; text-shadow: var(--glow); }
+.pastor-note {
+  margin-top: 25px;
+  padding: 30px 30px 32px;
+  background: var(--pink);
+  border: 1px solid var(--blue);
+  border-radius: 5px;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 24px;
+  line-height: 30px;
+  color: var(--navy);
+}
+.pastor-note .sig { font-weight: 700; margin-top: 1em; }
+
+.news { background: var(--blue); border-top: 5px solid var(--blue); padding: 28px 0 2px; color: #fff; }
+.news-banner {
+  background: rgba(255, 255, 255, .28);
+  border: 1px solid #fff;
+  border-radius: 5px;
+  padding: 15px;
+  text-align: center;
+}
+.news-banner h2 { color: #fff; font-size: 36px; margin: 0; text-shadow: .08em .08em .08em rgba(0, 0, 0, .4); }
+.news-feature { padding: 55px 0 3px; text-align: center; }
+.news-feature h2 { color: #fff; font-size: 50px; margin-bottom: 40px; }
+.poster-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5%; }
+.poster-pair img { width: 100%; }
+.news-item {
+  display: grid; grid-template-columns: 1fr 2fr; gap: 5.5%;
+  padding: 31px 0;
+  border-bottom: 1px solid #fff;
+}
+.news-item:last-child { border-bottom: 0; margin-bottom: 36px; }
+.news-item img { width: 100%; border: 1px solid #fff; aspect-ratio: 16 / 9; object-fit: cover; }
+.news-item h3 { color: #fff; font-size: 22px; margin-bottom: .4em; }
+.news-item p { color: #fff; margin-bottom: .9em; }
+.news-item .btn { margin-top: 10px; }
+
+.service-hours { border-top: 5px solid var(--blue); background: #fff; }
+.service-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.hours {
+  background: var(--sky);
+  padding: 50px;
+  text-align: center;
+  font-size: 17px;
+  line-height: 2em;
+  color: var(--blue);
+  font-family: var(--sans);
+}
+.hours h2 { font-size: 30px; color: var(--navy); line-height: 1.6; font-weight: 400; margin-bottom: .3em; }
+.hours ul { list-style: none; margin: 0; padding: 0; }
+.commission {
+  background: url("../img/gran-comision.jpg") center / cover no-repeat;
+  padding: 75px 50px 71px;
+  display: flex; flex-direction: column; justify-content: center;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 23px;
+  line-height: 1.25;
+  color: var(--navy);
+  text-shadow: var(--glow), var(--glow);
+}
+.commission .ref { font-weight: 700; margin-top: 1em; }
+
+/* ---------- Interior pages ---------- */
+.page-main { padding: 54px 0 60px; }
+.page-title { text-align: center; color: var(--navy); font-size: 30px; font-weight: 400; }
+.page-title.blue { color: var(--blue); }
+.page-title.ruled { padding-bottom: 6px; border-bottom: 1px solid var(--navy); font-weight: 700; }
+.page-title.bold { font-weight: 700; }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 5.5%; align-items: start; }
+.about-photo img { width: 300px; max-width: 100%; margin-inline: auto; border: 1px solid var(--navy); border-radius: 5px; }
+.about-photo figcaption { text-align: center; margin-top: 16px; font-size: 14px; }
+.about-copy { color: var(--navy); font-family: var(--sans); font-size: 16px; line-height: 1.5; padding-top: 18px; }
+.about-copy h1 { color: var(--blue); font-weight: 400; font-size: 30px; margin-bottom: 1.4em; }
+.about-copy p { margin-bottom: 1em; }
+
+/* Beliefs */
+.beliefs { max-width: 780px; margin-inline: auto; text-align: center; }
+.beliefs .hero-img {
+  width: 440px; margin: 0 auto 36px;
+  border: 2px solid var(--blue); border-radius: 5px;
+}
+.beliefs h2 { color: var(--red); font-size: 26px; font-weight: 400; margin: 0 0 22px; }
+.beliefs h3 { font-size: 22px; font-weight: 400; color: #333; margin: 44px 0 10px; }
+.beliefs h3:first-of-type { margin-top: 0; }
+.beliefs p { font-size: 13px; line-height: 1.75; }
+.beliefs .doctrine { margin-bottom: 76px; }
+.beliefs .ref { font-weight: 700; }
+.beliefs .prayer h3 { font-size: 20px; }
+.beliefs .prayer p { font-style: italic; }
+
+/* Bulletins */
+.bulletin-card {
+  display: block;
+  width: 320px; max-width: 100%;
+  margin: 60px auto 0;
+  padding: 22px 20px 18px;
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 16px;
+  text-align: center;
+  text-decoration: none;
+  transition: transform .2s, box-shadow .2s;
+}
+.bulletin-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0, 0, 0, .12); }
+.bulletin-card img { width: 80px; margin: 0 auto 22px; }
+.bulletin-card .date { display: block; font-family: var(--sans); font-weight: 700; font-size: 22px; color: var(--blue); }
+.bulletin-card .day { display: block; font-family: var(--sans); font-weight: 700; font-style: italic; font-size: 18px; color: var(--red); }
+.bulletin-archive { max-width: 420px; margin: 40px auto 0; text-align: center; }
+.bulletin-archive summary { cursor: pointer; font-family: var(--sans); font-weight: 600; color: var(--blue); font-size: 16px; }
+.bulletin-archive ul { list-style: none; padding: 0; margin: 14px 0 0; }
+.bulletin-archive li { padding: 4px 0; border-bottom: 1px solid rgba(0, 0, 73, .1); }
+.bulletin-archive a { font-family: var(--sans); text-decoration: none; }
+
+/* Gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 48px 5.5%;
+  margin-top: 40px;
+}
+.gallery figure { margin: 0; }
+.gallery button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.gallery img { width: 100%; aspect-ratio: 400 / 284; object-fit: cover; transition: opacity .2s; }
+.gallery button:hover img { opacity: .85; }
+.gallery figcaption { font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.1; color: #666; margin-top: 18px; }
+.pager { display: flex; justify-content: flex-end; gap: 6px; margin-top: 60px; padding-top: 12px; border-top: 1px solid #e2e2e2; font-family: Georgia, serif; }
+.pager button { border: 0; background: none; font: inherit; font-size: 15px; color: #999; padding: 4px 8px; cursor: pointer; }
+.pager button[aria-current="true"] { color: #7EBEC5; }
+.pager button:disabled { display: none; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 1000;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, .9);
+  padding: 50px 60px;
+}
+.lightbox.open { display: flex; }
+.lightbox figure { margin: 0; max-width: 100%; max-height: 100%; display: flex; flex-direction: column; align-items: center; }
+.lightbox img { max-width: 100%; max-height: calc(100vh - 140px); object-fit: contain; }
+.lightbox figcaption { color: #ccc; margin-top: 12px; text-align: center; font-size: 15px; }
+.lightbox button {
+  position: absolute; border: 0; background: none; color: #fff; cursor: pointer;
+  font-size: 44px; line-height: 1; padding: 10px; opacity: .8;
+}
+.lightbox button:hover { opacity: 1; }
+.lb-close { top: 10px; right: 16px; }
+.lb-prev { left: 8px; top: 50%; transform: translateY(-50%); }
+.lb-next { right: 8px; top: 50%; transform: translateY(-50%); }
+
+/* Contact form */
+.contact-form { max-width: 864px; margin: 60px auto 0; font-size: 16px; }
+.field { margin-bottom: 22px; }
+.field > label, .field legend { display: block; font-weight: 700; color: var(--text); margin-bottom: 6px; font-size: 16px; padding: 0; }
+.req { color: #d63637; }
+.name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.sublabel { display: block; font-size: 13px; margin-top: 4px; }
+.contact-form input[type=text], .contact-form input[type=email], .contact-form input[type=tel], .contact-form textarea {
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+.contact-form .short { max-width: 60%; }
+.contact-form textarea { min-height: 120px; resize: vertical; }
+.contact-form input:focus, .contact-form textarea:focus { outline: 2px solid var(--blue); outline-offset: 0; border-color: var(--blue); }
+fieldset.field { border: 0; margin: 0 0 22px; padding: 0; }
+.field > .check { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-weight: 400; }
+.hp { position: absolute; left: -9999px; }
+.contact-form button[type=submit] {
+  margin-top: 20px;
+  padding: 10px 15px;
+  font: inherit; font-size: 15px;
+  color: #444; background: #eee;
+  border: 1px solid #ddd; border-radius: 2px;
+  cursor: pointer;
+}
+.contact-form button[type=submit]:hover { background: #ddd; }
+.form-note { font-size: 13px; margin-top: 14px; }
+
+/* Privacy */
+.prose { max-width: 860px; margin-inline: auto; font-size: 15px; }
+.prose h4 { margin-top: 1.6em; color: var(--navy); font-weight: 700; }
+
+/* 404 */
+.notfound { text-align: center; padding: 80px 0; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  .gallery { grid-template-columns: repeat(3, 1fr); }
+  .main-nav { width: 100%; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  .subfooter-row { justify-content: center; text-align: center; flex-direction: column; gap: 4px; }
+  .service-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+  :root { --container: calc(100% - 32px); }
+  .site-header { padding-top: 24px; }
+  .site-logo { width: 290px; }
+  .main-nav { background: transparent; padding: 0; border-radius: 0; position: relative; }
+  .nav-toggle {
+    display: flex; align-items: center; justify-content: center;
+    margin: 8px auto 0; width: 52px; height: 44px;
+    background: none; border: 0; cursor: pointer; color: var(--blue);
+  }
+  .nav-toggle svg { width: 36px; height: 36px; }
+  .main-nav ul {
+    display: none;
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 50;
+    flex-direction: column; gap: 0;
+    background: #fff;
+    border-top: 3px solid var(--red);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    padding: 5%;
+  }
+  .main-nav.open ul { display: flex; }
+  .main-nav li { border-bottom: 1px solid rgba(0, 0, 0, .03); }
+  .main-nav a { color: var(--navy); padding: 10px 5%; font-size: 15px; }
+
+  .welcome-grid, .poster-pair, .news-item, .about-grid { grid-template-columns: 1fr; gap: 24px; }
+  .welcome-title h1 { font-size: 24px; }
+  .pastor-note { font-size: 20px; line-height: 1.35; padding: 22px 18px; }
+  .news-banner h2 { font-size: 30px; }
+  .news-feature h2 { font-size: 38px; }
+  .hours { padding: 40px 16px; font-size: 16px; }
+  .commission { padding: 50px 22px; font-size: 20px; }
+  .gallery { grid-template-columns: repeat(2, 1fr); gap: 30px 16px; }
+  .gallery figcaption { font-size: 14px; }
+  .name-row { grid-template-columns: 1fr; gap: 12px; }
+  .contact-form .short { max-width: 100%; }
+  .beliefs .hero-img { width: 100%; }
+  .lightbox { padding: 50px 8px; }
+}
