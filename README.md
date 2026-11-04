@@ -40,7 +40,7 @@ The page shows 8 photos at a time and builds the page numbers automatically.
 
 ## Contact form
 
-The form posts to [FormSubmit](https://formsubmit.co) and is delivered to `iglesiabautista@pibfwichita.com`. The **first** submission sends a one-time activation email to that inbox. Click the link in it, and every message after that is delivered normally.
+The form posts to [Formspree](https://formspree.io) (form `xvkklalp`). Messages go to the email address set on that form in your Formspree dashboard, which is also where you can see past submissions. After sending, visitors are taken to `contacto/gracias/`.
 
 ## Deploying (GitHub Pages)
 

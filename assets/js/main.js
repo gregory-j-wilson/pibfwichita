@@ -400,4 +400,39 @@
       }
     });
   });
+
+  // ---------- Contact form → Formspree ----------
+  // Sends in the background, then goes to the "gracias" page. Without
+  // JavaScript the form still posts normally and Formspree shows its own
+  // confirmation page.
+  var contactForm = document.querySelector('.contact-form[action*="formspree.io"]');
+  if (contactForm && window.fetch && window.FormData) {
+    var status = contactForm.querySelector('.form-status');
+    var submitBtn = contactForm.querySelector('button[type="submit"]');
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var data = new FormData(contactForm);
+      // Send ticked "Me gustaría" boxes as one line
+      var wants = data.getAll('Me gustaría');
+      data.delete('Me gustaría');
+      data.append('Me gustaría', wants.length ? wants.join(', ') : '—');
+      var label = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando…';
+      if (status) status.hidden = true;
+      fetch(contactForm.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          window.location.href = contactForm.getAttribute('data-thanks') || 'gracias/';
+        })
+        .catch(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = label;
+          if (status) {
+            status.textContent = 'Lo sentimos, no se pudo enviar su mensaje. Por favor intente de nuevo o llámenos al (316) 794-6217.';
+            status.hidden = false;
+          }
+        });
+    });
+  }
 })();

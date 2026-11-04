@@ -539,6 +539,7 @@ p:last-child { margin-bottom: 0; }
 fieldset.field { border: 0; margin: 0 0 22px; padding: 0; }
 .field > .check { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-weight: 400; }
 .hp { position: absolute; left: -9999px; }
+.form-status { color: #a11; font-weight: 600; margin: 0 0 12px; }
 .contact-form button[type=submit] {
   margin-top: 20px;
   padding: 10px 15px;

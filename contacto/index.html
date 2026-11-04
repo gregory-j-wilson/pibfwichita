@@ -50,11 +50,9 @@
     <div class="page-main">
       <div class="container">
         <h1 class="page-title ruled">Contacto</h1>
-        <form class="contact-form" action="https://formsubmit.co/iglesiabautista@pibfwichita.com" method="POST">
+        <form class="contact-form" action="https://formspree.io/f/xvkklalp" method="POST" data-thanks="gracias/">
           <input type="hidden" name="_subject" value="Nuevo mensaje desde pibfwichita.com">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://pibfwichita.com/contacto/gracias/">
-          <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 
           <div class="field">
             <label for="nombre">Nombre <span class="req">*</span></label>
@@ -81,6 +79,7 @@
             <label for="mensaje">Mensaje <span class="req">*</span></label>
             <textarea id="mensaje" name="Mensaje" required></textarea>
           </div>
+          <p class="form-status" role="status" aria-live="polite" hidden></p>
           <button type="submit">Submitir</button>
         </form>
       </div>
