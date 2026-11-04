@@ -445,48 +445,57 @@
     dialog.className = 'aviso-dialog';
     document.body.appendChild(dialog);
 
+    // The list and every pop-up are built once, when the page loads, and
+    // only shown or hidden afterwards. That way Google Translate (language
+    // menu) translates them together with the rest of the page.
+    panel.innerHTML = '<p class="aviso-panel-title">Notificaciones</p>' + (active.length
+      ? '<ul class="aviso-list">' + active.map(function (a, i) {
+          return '<li data-i="' + i + '">' +
+            '<span class="aviso-dot" aria-hidden="true"></span>' +
+            '<span class="aviso-text"><span class="aviso-title">' + esc(a.title) + '<span class="sr-only aviso-new"> (nueva)</span></span>' +
+            (a.when ? '<span class="aviso-when">' + esc(a.when) + '</span>' : '') + '</span>' +
+            '<button type="button" class="aviso-open" data-i="' + i + '">Abrir</button></li>';
+        }).join('') + '</ul>'
+      : '<p class="aviso-empty">No hay notificaciones ahora</p>');
+
+    dialog.innerHTML = '<button type="button" class="aviso-close" aria-label="Cerrar">&times;</button>' +
+      active.map(function (a, i) {
+        var body;
+        if (a.images && a.images.length) {
+          body = '<div class="aviso-imgs' + (a.images.length === 1 ? ' one' : '') + '">' + a.images.map(function (im) {
+            return '<img src="' + new URL(im.src, assets).href + '" width="1024" height="1536" alt="' + esc(im.alt) + '" loading="lazy">';
+          }).join('') + '</div>';
+        } else {
+          body = '<div class="aviso-details">' +
+            (a.when ? '<p class="aviso-row">' + I_CAL + '<span>' + esc(a.when) + '</span></p>' : '') +
+            (a.place ? '<p class="aviso-row">' + I_PIN + '<span>' + esc(a.place) + '</span></p>' : '') +
+            (a.description ? '<p class="aviso-desc">' + esc(a.description) + '</p>' : '') + '</div>';
+        }
+        return '<div class="aviso-inner" data-i="' + i + '" hidden><h2>' + esc(a.title) + '</h2>' + body + '</div>';
+      }).join('');
+    dialog.querySelectorAll('.aviso-imgs').forEach(posterToggle);
+    dialog.querySelector('.aviso-close').addEventListener('click', closeDialog);
+
     function updateBell() {
       var unread = active.filter(function (a) { return !isRead(a); }).length;
       bell.classList.toggle('shine', unread > 0);
       bell.setAttribute('aria-label', unread ? 'Notificaciones: ' + unread + ' sin abrir' : 'Notificaciones');
-    }
-    function renderPanel() {
-      if (!active.length) {
-        panel.innerHTML = '<p class="aviso-panel-title">Notificaciones</p><p class="aviso-empty">No hay notificaciones ahora</p>';
-        return;
-      }
-      panel.innerHTML = '<p class="aviso-panel-title">Notificaciones</p><ul class="aviso-list">' + active.map(function (a, i) {
-        var unread = !isRead(a);
-        return '<li class="' + (unread ? 'unread' : '') + '">' +
-          '<span class="aviso-dot" aria-hidden="true"></span>' +
-          '<span class="aviso-text"><span class="aviso-title">' + esc(a.title) + (unread ? '<span class="sr-only"> (nueva)</span>' : '') + '</span>' +
-          (a.when ? '<span class="aviso-when">' + esc(a.when) + '</span>' : '') + '</span>' +
-          '<button type="button" class="aviso-open" data-i="' + i + '">Abrir</button></li>';
-      }).join('') + '</ul>';
+      panel.querySelectorAll('.aviso-list li').forEach(function (li) {
+        var un = !isRead(active[+li.getAttribute('data-i')]);
+        li.classList.toggle('unread', un);
+        li.querySelector('.aviso-new').hidden = !un;
+      });
     }
     function setOpen(open) {
-      if (open) renderPanel();
       panel.hidden = !open;
       bell.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
-    function openAviso(a) {
-      var body;
-      if (a.images && a.images.length) {
-        body = '<div class="aviso-imgs' + (a.images.length === 1 ? ' one' : '') + '">' + a.images.map(function (im) {
-          return '<img src="' + new URL(im.src, assets).href + '" width="1024" height="1536" alt="' + esc(im.alt) + '">';
-        }).join('') + '</div>';
-      } else {
-        body = '<div class="aviso-details">' +
-          (a.when ? '<p class="aviso-row">' + I_CAL + '<span>' + esc(a.when) + '</span></p>' : '') +
-          (a.place ? '<p class="aviso-row">' + I_PIN + '<span>' + esc(a.place) + '</span></p>' : '') +
-          (a.description ? '<p class="aviso-desc">' + esc(a.description) + '</p>' : '') + '</div>';
-      }
-      dialog.setAttribute('aria-label', a.title);
-      dialog.innerHTML = '<button type="button" class="aviso-close" aria-label="Cerrar">&times;</button>' +
-        '<div class="aviso-inner"><h2>' + esc(a.title) + '</h2>' + body + '</div>';
-      dialog.querySelector('.aviso-close').addEventListener('click', closeDialog);
-      var pair = dialog.querySelector('.aviso-imgs');
-      if (pair) posterToggle(pair);
+    function openAviso(i) {
+      var a = active[i];
+      dialog.querySelectorAll('.aviso-inner').forEach(function (v) { v.hidden = +v.getAttribute('data-i') !== i; });
+      var view = dialog.querySelector('.aviso-inner[data-i="' + i + '"]');
+      dialog.setAttribute('aria-label', view.querySelector('h2').textContent);
+      dialog.classList.toggle('has-details', !!view.querySelector('.aviso-details'));
       markRead(a);
       updateBell();
       setOpen(false);
@@ -504,7 +513,7 @@
     panel.addEventListener('click', function (e) {
       e.stopPropagation();
       var btn = e.target.closest('.aviso-open');
-      if (btn) openAviso(active[+btn.getAttribute('data-i')]);
+      if (btn) openAviso(+btn.getAttribute('data-i'));
     });
     document.addEventListener('click', function () { if (!panel.hidden) setOpen(false); });
     document.addEventListener('keydown', function (e) {
