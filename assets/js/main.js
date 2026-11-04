@@ -267,22 +267,65 @@
     }).catch(function () { fig.hidden = true; });
   })();
 
-  // ---------- Announcement bell (every page) ----------
-  // To post a new announcement: change AVISO.id (so the bell shines again
-  // for everyone), update the title and images (Spanish first), and set
-  // `until` to when it should end. After `until`, the bell goes quiet (no
-  // dot or shimmer) and shows "No hay notificaciones ahora" when clicked.
+  // ---------- Notifications bell (every page) ----------
+  // Each notification shows in the bell's drop-down until its `until` time
+  // (Wichita time, CST = -06:00), soonest first. "Abrir" opens it: the
+  // posters if it has `images` (Spanish first), otherwise the title, date,
+  // place and description. The bell shimmers and shows a red dot until the
+  // visitor has opened every current notification. To add one, copy a block
+  // and give it a new, unique `id`.
   // News items on the home page marked data-until="..." also move under
   // "Ver más" at that time.
-  var AVISO = {
-    id: 'ropa-gratis-2026-11',
-    until: '2026-11-08T00:00:00-06:00', // midnight Nov 8, Wichita time (CST)
-    title: 'Ropa Gratis · Clothes Giveaway',
-    images: [
-      { src: 'img/ropa-gratis-2026-esp.jpg', alt: 'Cartel de Ropa Gratis: viernes 6 y sábado 7 de noviembre de 2026, 11 AM a 3 PM, 856 S Green St., Wichita, KS 67211. Ropa, zapatos y trastes. ¡Traiga su propia bolsa y tome lo que necesite!' },
-      { src: 'img/ropa-gratis-2026-eng.jpg', alt: 'Clothes Giveaway poster: Friday November 6 and Saturday November 7, 2026, 11 AM to 3 PM, 856 S Green St., Wichita, KS 67211. Clothes, shoes and dishes. Bring your own bag and take what you need.' }
-    ]
-  };
+  var AVISOS = [
+    {
+      id: 'ropa-gratis-2026-11',
+      until: '2026-11-08T00:00:00-06:00',
+      title: 'Ropa Gratis · Clothes Giveaway',
+      when: 'Viernes 6 y sábado 7 de noviembre · 11 AM – 3 PM',
+      place: '856 S. Green St., Wichita, KS 67211',
+      images: [
+        { src: 'img/ropa-gratis-2026-esp.jpg', alt: 'Cartel de Ropa Gratis: viernes 6 y sábado 7 de noviembre de 2026, 11 AM a 3 PM, 856 S Green St., Wichita, KS 67211. Ropa, zapatos y trastes. ¡Traiga su propia bolsa y tome lo que necesite!' },
+        { src: 'img/ropa-gratis-2026-eng.jpg', alt: 'Clothes Giveaway poster: Friday November 6 and Saturday November 7, 2026, 11 AM to 3 PM, 856 S Green St., Wichita, KS 67211. Clothes, shoes and dishes. Bring your own bag and take what you need.' }
+      ]
+    },
+    {
+      id: 'dias-de-trabajo-2026-11',
+      until: '2026-11-08T00:00:00-06:00',
+      title: 'Días de trabajo en el edificio nuevo',
+      when: 'Viernes 6 y sábado 7 de noviembre',
+      place: 'Edificio nuevo · 856 S. Green St., Wichita, KS 67211',
+      description: 'Se necesita la ayuda de todos para tener el edificio listo para la inauguración. También estaremos donando a la comunidad la ropa que está en los salones, así que habrá oportunidad de evangelizar.'
+    },
+    {
+      id: 'ultimo-servicio-dodge-2026-11',
+      until: '2026-11-09T00:00:00-06:00',
+      title: 'Último servicio en este edificio',
+      when: 'Domingo 8 de noviembre',
+      place: '1127 S. Dodge Ave., Wichita, KS 67213',
+      description: 'Será nuestro último servicio en este edificio y queremos tener algo especial. Tendremos nuestra última comida de traje aquí. Anótese con la hna. Andrea para la comida y no falte a este servicio especial.'
+    },
+    {
+      id: 'inauguracion-2026-11',
+      until: '2026-11-13T00:00:00-06:00',
+      title: 'Inauguración de nuestro edificio',
+      when: 'Jueves 12 de noviembre · 6:30 p.m.',
+      place: '856 S. Green St., Wichita, KS 67211',
+      images: [
+        { src: 'img/inauguracion-2026.jpg', alt: 'Cartel de la Inauguración de nuestro edificio: jueves 12 de noviembre, 6:30 p.m., 856 S. Green St., Wichita, KS 67211. Habrá una ligera cena después del servicio. Si necesita transportación, favor de llamar al 316-794-6217. 1 Samuel 7:12: “Hasta aquí nos ayudó Jehová.”' }
+      ]
+    },
+    {
+      id: 'conferencia-fundamentos-2026-11',
+      until: '2026-11-15T00:00:00-06:00',
+      title: 'Conferencia de Fundamentos',
+      when: 'Viernes 13 (6:30 p.m.) y sábado 14 de noviembre (10:00 a.m.)',
+      place: '856 S. Green St., Wichita, KS',
+      images: [
+        { src: 'img/conferencia-fundamentos-2026-esp.jpg', alt: 'Cartel de la Conferencia de Fundamentos, 2 Timoteo 2:19: viernes 13 de noviembre a las 6:30 PM con cena ligera al terminar, y sábado 14 de noviembre a las 10:00 AM con almuerzo al final. 856 S. Green St., Wichita, KS.' },
+        { src: 'img/conferencia-fundamentos-2026-eng.jpg', alt: 'Fundamental Conference poster, 2 Timothy 2:19: Friday November 13 at 6:30 PM with dinner afterward, and Saturday November 14 at 10:00 AM with lunch at the end. 856 S. Green St., Wichita, KS.' }
+      ]
+    }
+  ];
 
   function expired(when) {
     var t = Date.parse(when);
@@ -303,64 +346,110 @@
   (function () {
     var script = document.currentScript || document.querySelector('script[src*="main.js"]');
     var assets = new URL('../', script.src); // .../assets/
-    var active = AVISO.images.length > 0 && !(AVISO.until && expired(AVISO.until));
-    var key = 'pibf-aviso-visto';
-    var seen = false;
-    try { seen = localStorage.getItem(key) === AVISO.id; } catch (e) {}
+    var KEY = 'pibf-avisos-leidos';
+    var read = [];
+    try { read = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) {}
+    try { if (localStorage.getItem('pibf-aviso-visto') === 'ropa-gratis-2026-11') read.push('ropa-gratis-2026-11'); } catch (e) {}
+    function isRead(a) { return read.indexOf(a.id) !== -1; }
+    function markRead(a) {
+      if (isRead(a)) return;
+      read.push(a.id);
+      try { localStorage.setItem(KEY, JSON.stringify(read)); } catch (e) {}
+    }
+    function esc(t) {
+      return String(t).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; });
+    }
+    var active = AVISOS.filter(function (a) { return !(a.until && expired(a.until)); })
+      .sort(function (x, y) { return Date.parse(x.until) - Date.parse(y.until); });
+
+    var BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
+    var I_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
+    var I_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
 
     var bell = document.createElement('button');
     bell.type = 'button';
-    bell.className = 'aviso-bell' + (active && !seen ? ' shine' : '');
-    bell.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="dot"></span>';
+    bell.className = 'aviso-bell';
+    bell.innerHTML = BELL + '<span class="dot"></span>';
+    bell.setAttribute('aria-expanded', 'false');
+    bell.setAttribute('aria-controls', 'aviso-panel');
     document.body.appendChild(bell);
 
-    if (!active) {
-      // Nothing to announce: a small drop-down under the bell
-      bell.setAttribute('aria-label', 'Notificaciones');
-      bell.setAttribute('aria-expanded', 'false');
-      bell.setAttribute('aria-controls', 'aviso-menu');
-      var menu = document.createElement('div');
-      menu.id = 'aviso-menu';
-      menu.className = 'aviso-menu';
-      menu.setAttribute('role', 'status');
-      menu.hidden = true;
-      menu.textContent = 'No hay notificaciones ahora';
-      document.body.appendChild(menu);
-      var setOpen = function (open) {
-        menu.hidden = !open;
-        bell.setAttribute('aria-expanded', open ? 'true' : 'false');
-      };
-      bell.addEventListener('click', function (e) { e.stopPropagation(); setOpen(menu.hidden); });
-      document.addEventListener('click', function (e) { if (!menu.contains(e.target)) setOpen(false); });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setOpen(false); bell.focus(); } });
-      return;
-    }
+    var panel = document.createElement('div');
+    panel.id = 'aviso-panel';
+    panel.className = 'aviso-panel';
+    panel.setAttribute('role', 'region');
+    panel.setAttribute('aria-label', 'Notificaciones');
+    panel.hidden = true;
+    document.body.appendChild(panel);
 
-    bell.setAttribute('aria-label', 'Anuncios — ' + AVISO.title);
-    bell.setAttribute('aria-haspopup', 'dialog');
     var dialog = document.createElement('dialog');
     dialog.className = 'aviso-dialog';
-    dialog.setAttribute('aria-label', AVISO.title);
-    var imgs = AVISO.images.map(function (im) {
-      return '<img src="' + new URL(im.src, assets).href + '" width="1024" height="1536" alt="' + im.alt.replace(/"/g, '&quot;') + '">';
-    }).join('');
-    dialog.innerHTML = '<button type="button" class="aviso-close" aria-label="Cerrar">&times;</button>' +
-      '<div class="aviso-inner"><h2>' + AVISO.title + '</h2><div class="aviso-imgs">' + imgs + '</div></div>';
     document.body.appendChild(dialog);
 
-    bell.addEventListener('click', function () {
-      bell.classList.remove('shine');
-      try { localStorage.setItem(key, AVISO.id); } catch (e) {}
+    function updateBell() {
+      var unread = active.filter(function (a) { return !isRead(a); }).length;
+      bell.classList.toggle('shine', unread > 0);
+      bell.setAttribute('aria-label', unread ? 'Notificaciones: ' + unread + ' sin abrir' : 'Notificaciones');
+    }
+    function renderPanel() {
+      if (!active.length) {
+        panel.innerHTML = '<p class="aviso-panel-title">Notificaciones</p><p class="aviso-empty">No hay notificaciones ahora</p>';
+        return;
+      }
+      panel.innerHTML = '<p class="aviso-panel-title">Notificaciones</p><ul class="aviso-list">' + active.map(function (a, i) {
+        var unread = !isRead(a);
+        return '<li class="' + (unread ? 'unread' : '') + '">' +
+          '<span class="aviso-dot" aria-hidden="true"></span>' +
+          '<span class="aviso-text"><span class="aviso-title">' + esc(a.title) + (unread ? '<span class="sr-only"> (nueva)</span>' : '') + '</span>' +
+          (a.when ? '<span class="aviso-when">' + esc(a.when) + '</span>' : '') + '</span>' +
+          '<button type="button" class="aviso-open" data-i="' + i + '">Abrir</button></li>';
+      }).join('') + '</ul>';
+    }
+    function setOpen(open) {
+      if (open) renderPanel();
+      panel.hidden = !open;
+      bell.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    function openAviso(a) {
+      var body;
+      if (a.images && a.images.length) {
+        body = '<div class="aviso-imgs' + (a.images.length === 1 ? ' one' : '') + '">' + a.images.map(function (im) {
+          return '<img src="' + new URL(im.src, assets).href + '" width="1024" height="1536" alt="' + esc(im.alt) + '">';
+        }).join('') + '</div>';
+      } else {
+        body = '<div class="aviso-details">' +
+          (a.when ? '<p class="aviso-row">' + I_CAL + '<span>' + esc(a.when) + '</span></p>' : '') +
+          (a.place ? '<p class="aviso-row">' + I_PIN + '<span>' + esc(a.place) + '</span></p>' : '') +
+          (a.description ? '<p class="aviso-desc">' + esc(a.description) + '</p>' : '') + '</div>';
+      }
+      dialog.setAttribute('aria-label', a.title);
+      dialog.innerHTML = '<button type="button" class="aviso-close" aria-label="Cerrar">&times;</button>' +
+        '<div class="aviso-inner"><h2>' + esc(a.title) + '</h2>' + body + '</div>';
+      dialog.querySelector('.aviso-close').addEventListener('click', closeDialog);
+      markRead(a);
+      updateBell();
+      setOpen(false);
       if (typeof dialog.showModal === 'function') dialog.showModal();
       else dialog.setAttribute('open', '');
-    });
-    function close() {
+    }
+    function closeDialog() {
       if (typeof dialog.close === 'function') dialog.close();
       else dialog.removeAttribute('open');
       bell.focus();
     }
-    dialog.querySelector('.aviso-close').addEventListener('click', close);
-    dialog.addEventListener('click', function (e) { if (e.target === dialog) close(); });
+    dialog.addEventListener('click', function (e) { if (e.target === dialog) closeDialog(); });
+
+    bell.addEventListener('click', function (e) { e.stopPropagation(); setOpen(panel.hidden); });
+    panel.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var btn = e.target.closest('.aviso-open');
+      if (btn) openAviso(active[+btn.getAttribute('data-i')]);
+    });
+    document.addEventListener('click', function () { if (!panel.hidden) setOpen(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !panel.hidden) { setOpen(false); bell.focus(); }
+    });
+    updateBell();
   })();
 
   // ---------- Back to top button (every page) ----------
