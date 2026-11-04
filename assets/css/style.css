@@ -55,7 +55,7 @@ p:last-child { margin-bottom: 0; }
 .site-logo img { width: 100%; }
 .header-rule { border: 0; border-top: 2px solid var(--blue); margin: 0; }
 .main-nav {
-  width: 66.667%;
+  width: 75%;
   margin: -1px auto 0;
   padding: 10px 20px;
   background: rgba(10, 9, 9, .08);
