@@ -552,4 +552,90 @@
         });
     });
   }
+
+  // ---------- Language menu (Google Translate, every page) ----------
+  // The site is in Spanish. Picking another language loads Google Translate
+  // (only then) and translates the page; the choice carries to other pages
+  // through Google's "googtrans" cookie. "Español" switches back.
+  (function () {
+    var header = document.querySelector('.site-header');
+    if (!header) return;
+    var LANGS = [
+      ['es', 'Español'], ['en', 'English'], ['pt', 'Português'], ['fr', 'Français'],
+      ['ht', 'Kreyòl ayisyen'], ['de', 'Deutsch'], ['it', 'Italiano'], ['nl', 'Nederlands'],
+      ['pl', 'Polski'], ['ro', 'Română'], ['ru', 'Русский'], ['uk', 'Українська'],
+      ['el', 'Ελληνικά'], ['tr', 'Türkçe'], ['ar', 'العربية'], ['iw', 'עברית'],
+      ['fa', 'فارسی'], ['ur', 'اردو'], ['hi', 'हिन्दी'], ['bn', 'বাংলা'],
+      ['pa', 'ਪੰਜਾਬੀ'], ['ta', 'தமிழ்'], ['te', 'తెలుగు'], ['ne', 'नेपाली'],
+      ['zh-CN', '中文 (简体)'], ['zh-TW', '中文 (繁體)'], ['ja', '日本語'], ['ko', '한국어'],
+      ['vi', 'Tiếng Việt'], ['th', 'ไทย'], ['tl', 'Filipino'], ['id', 'Bahasa Indonesia'],
+      ['ms', 'Bahasa Melayu'], ['my', 'မြန်မာ'], ['km', 'ខ្មែរ'], ['sw', 'Kiswahili'],
+      ['am', 'አማርኛ'], ['so', 'Soomaali'], ['ha', 'Hausa'], ['yo', 'Yorùbá'], ['zu', 'isiZulu']
+    ];
+    var GLOBE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
+
+    function current() {
+      var m = document.cookie.match(/(?:^|;\s*)googtrans=\/[^\/]*\/([^;]+)/);
+      return m ? decodeURIComponent(m[1]) : 'es';
+    }
+    function clearCookie() {
+      var past = '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+      var host = location.hostname;
+      document.cookie = 'googtrans' + past;
+      if (host) {
+        document.cookie = 'googtrans' + past + '; domain=' + host;
+        document.cookie = 'googtrans' + past + '; domain=.' + host.replace(/^www\./, '');
+      }
+    }
+
+    var bar = document.createElement('div');
+    bar.className = 'translate-bar notranslate';
+    bar.setAttribute('translate', 'no');
+    var cur = current();
+    bar.innerHTML = '<label class="translate-box">' + GLOBE +
+      '<span class="sr-only">Idioma / Language</span>' +
+      '<select aria-label="Idioma / Language">' + LANGS.map(function (l) {
+        return '<option value="' + l[0] + '"' + (l[0] === cur ? ' selected' : '') + '>' + l[1] + '</option>';
+      }).join('') + '</select></label><div id="gt-element" aria-hidden="true"></div>';
+    header.insertBefore(bar, header.firstChild);
+    var select = bar.querySelector('select');
+
+    var loading = null;
+    function loadGoogle() {
+      if (loading) return loading;
+      loading = new Promise(function (resolve) {
+        window.pibfGoogleTranslateInit = function () {
+          new google.translate.TranslateElement({
+            pageLanguage: 'es',
+            includedLanguages: LANGS.map(function (l) { return l[0]; }).join(','),
+            autoDisplay: false
+          }, 'gt-element');
+          resolve();
+        };
+        var s = document.createElement('script');
+        s.src = 'https://translate.google.com/translate_a/element.js?cb=pibfGoogleTranslateInit';
+        s.async = true;
+        s.onerror = function () { select.value = 'es'; };
+        document.head.appendChild(s);
+      });
+      return loading;
+    }
+    function translateTo(code) {
+      loadGoogle().then(function () {
+        var tries = 0;
+        (function apply() {
+          var combo = document.querySelector('#gt-element select.goog-te-combo');
+          if (!combo) { if (++tries < 50) setTimeout(apply, 100); return; }
+          combo.value = code;
+          combo.dispatchEvent(new Event('change'));
+        })();
+      });
+    }
+
+    select.addEventListener('change', function () {
+      if (select.value === 'es') { clearCookie(); location.reload(); return; }
+      translateTo(select.value);
+    });
+    if (cur !== 'es') loadGoogle();
+  })();
 })();
