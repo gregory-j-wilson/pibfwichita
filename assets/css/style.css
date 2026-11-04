@@ -351,14 +351,14 @@ fieldset.field { border: 0; margin: 0 0 22px; padding: 0; }
   .main-nav ul {
     display: none;
     position: absolute; left: 0; right: 0; top: 100%; z-index: 50;
-    flex-direction: column; gap: 0;
+    flex-direction: column; flex-wrap: nowrap; gap: 0;
     background: #fff;
     border-top: 3px solid var(--red);
     box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
     padding: 5%;
   }
   .main-nav.open ul { display: flex; }
-  .main-nav li { border-bottom: 1px solid rgba(0, 0, 0, .03); }
+  .main-nav li { border-bottom: 1px solid #a6a6a6; }
   .main-nav a { color: var(--navy); padding: 10px 5%; font-size: 15px; }
 
   .welcome-grid, .poster-pair, .news-item, .about-grid { grid-template-columns: 1fr; gap: 24px; }
