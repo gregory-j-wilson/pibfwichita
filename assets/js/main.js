@@ -363,7 +363,8 @@
 
   // ---------- Church address change (every page) ----------
   // From midnight Nov 12 (Wichita time) every address marked data-address,
-  // and the address Google reads on the home page, shows the new building.
+  // the address Google reads on the home page, and the home page photo
+  // (img data-new-src) show the new building.
   var MUDANZA = {
     at: '2026-11-12T00:00:00-06:00',
     text: '856 S Green St, Wichita, KS 67211',
@@ -372,6 +373,10 @@
   };
   if (expired(MUDANZA.at)) {
     document.querySelectorAll('[data-address]').forEach(function (el) { el.textContent = MUDANZA.text; });
+    document.querySelectorAll('img[data-new-src]').forEach(function (img) {
+      img.src = img.getAttribute('data-new-src');
+      img.alt = img.getAttribute('data-new-alt') || img.alt;
+    });
     var ld = document.getElementById('church-ld');
     if (ld) {
       try {
