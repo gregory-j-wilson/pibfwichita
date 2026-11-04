@@ -152,30 +152,75 @@
 
   // ---------- Announcement bell (every page) ----------
   // To post a new announcement: change AVISO.id (so the bell shines again
-  // for everyone) and update the title and images. Spanish goes first.
+  // for everyone), update the title and images (Spanish first), and set
+  // `until` to when it should end. After `until`, the bell goes quiet (no
+  // dot or shimmer) and shows "No hay notificaciones ahora" when clicked.
+  // News items on the home page marked data-until="..." also move under
+  // "Ver más" at that time.
   var AVISO = {
     id: 'ropa-gratis-2026-11',
+    until: '2026-11-08T00:00:00-06:00', // midnight Nov 8, Wichita time (CST)
     title: 'Ropa Gratis · Clothes Giveaway',
     images: [
       { src: 'img/ropa-gratis-2026-esp.jpg', alt: 'Cartel de Ropa Gratis: viernes 6 y sábado 7 de noviembre de 2026, 11 AM a 3 PM, 856 S Green St., Wichita, KS 67211. Ropa, zapatos y trastes. ¡Traiga su propia bolsa y tome lo que necesite!' },
       { src: 'img/ropa-gratis-2026-eng.jpg', alt: 'Clothes Giveaway poster: Friday November 6 and Saturday November 7, 2026, 11 AM to 3 PM, 856 S Green St., Wichita, KS 67211. Clothes, shoes and dishes. Bring your own bag and take what you need.' }
     ]
   };
+
+  function expired(when) {
+    var t = Date.parse(when);
+    return !isNaN(t) && Date.now() >= t;
+  }
+
+  // Move expired news on the home page under "Ver más" (newest first)
+  (function () {
+    var more = document.querySelector('.news-more');
+    if (!more) return;
+    var summary = more.querySelector('summary');
+    var old = Array.prototype.filter.call(document.querySelectorAll('#novedades [data-until]'), function (el) {
+      return !more.contains(el) && expired(el.getAttribute('data-until'));
+    });
+    for (var i = old.length - 1; i >= 0; i--) summary.insertAdjacentElement('afterend', old[i]);
+  })();
+
   (function () {
     var script = document.currentScript || document.querySelector('script[src*="main.js"]');
     var assets = new URL('../', script.src); // .../assets/
+    var active = AVISO.images.length > 0 && !(AVISO.until && expired(AVISO.until));
     var key = 'pibf-aviso-visto';
     var seen = false;
     try { seen = localStorage.getItem(key) === AVISO.id; } catch (e) {}
 
     var bell = document.createElement('button');
     bell.type = 'button';
-    bell.className = 'aviso-bell' + (seen ? '' : ' shine');
-    bell.setAttribute('aria-label', 'Anuncios — ' + AVISO.title);
-    bell.setAttribute('aria-haspopup', 'dialog');
+    bell.className = 'aviso-bell' + (active && !seen ? ' shine' : '');
     bell.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="dot"></span>';
     document.body.appendChild(bell);
 
+    if (!active) {
+      // Nothing to announce: a small drop-down under the bell
+      bell.setAttribute('aria-label', 'Notificaciones');
+      bell.setAttribute('aria-expanded', 'false');
+      bell.setAttribute('aria-controls', 'aviso-menu');
+      var menu = document.createElement('div');
+      menu.id = 'aviso-menu';
+      menu.className = 'aviso-menu';
+      menu.setAttribute('role', 'status');
+      menu.hidden = true;
+      menu.textContent = 'No hay notificaciones ahora';
+      document.body.appendChild(menu);
+      var setOpen = function (open) {
+        menu.hidden = !open;
+        bell.setAttribute('aria-expanded', open ? 'true' : 'false');
+      };
+      bell.addEventListener('click', function (e) { e.stopPropagation(); setOpen(menu.hidden); });
+      document.addEventListener('click', function (e) { if (!menu.contains(e.target)) setOpen(false); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setOpen(false); bell.focus(); } });
+      return;
+    }
+
+    bell.setAttribute('aria-label', 'Anuncios — ' + AVISO.title);
+    bell.setAttribute('aria-haspopup', 'dialog');
     var dialog = document.createElement('dialog');
     dialog.className = 'aviso-dialog';
     dialog.setAttribute('aria-label', AVISO.title);

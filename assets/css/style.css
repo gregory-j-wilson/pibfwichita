@@ -178,6 +178,25 @@ p:last-child { margin-bottom: 0; }
 .news-more[open] .less-label { display: inline; }
 .news-more .news-item:first-of-type { border-top: 1px solid #fff; margin-top: 24px; }
 .news-more .news-item:last-child { margin-bottom: 0; }
+.news-more > .news-feature { padding-top: 40px; padding-bottom: 28px; }
+
+.aviso-menu {
+  position: fixed; top: 84px; right: 14px; z-index: 61;
+  background: #fff; color: var(--navy);
+  font-family: var(--sans); font-size: 16px; font-weight: 500;
+  padding: 14px 18px;
+  border: 1px solid rgba(0, 0, 73, .15);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 73, .25);
+  white-space: nowrap;
+}
+.aviso-menu::before {
+  content: ""; position: absolute; top: -7px; right: 22px;
+  width: 12px; height: 12px; background: #fff;
+  border-left: 1px solid rgba(0, 0, 73, .15); border-top: 1px solid rgba(0, 0, 73, .15);
+  transform: rotate(45deg);
+}
+.aviso-menu[hidden] { display: none; }
 
 /* ---------- Announcement bell ---------- */
 .aviso-bell {
@@ -244,6 +263,7 @@ p:last-child { margin-bottom: 0; }
 }
 @media (max-width: 767px) {
   .aviso-bell { top: 10px; right: 10px; width: 50px; height: 50px; }
+  .aviso-menu { top: 72px; right: 10px; }
   .aviso-bell svg { width: 24px; height: 24px; }
   .aviso-dialog .aviso-imgs { grid-template-columns: 1fr; }
   .aviso-dialog h2 { font-size: 22px; }
