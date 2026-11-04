@@ -373,9 +373,15 @@
   };
   if (expired(MUDANZA.at)) {
     document.querySelectorAll('[data-address]').forEach(function (el) { el.textContent = MUDANZA.text; });
+    // Swap the photo only once the new one has loaded (keeps the old photo
+    // if the new file isn't on the site).
     document.querySelectorAll('img[data-new-src]').forEach(function (img) {
-      img.src = img.getAttribute('data-new-src');
-      img.alt = img.getAttribute('data-new-alt') || img.alt;
+      var pre = new Image();
+      pre.onload = function () {
+        img.src = pre.src;
+        img.alt = img.getAttribute('data-new-alt') || img.alt;
+      };
+      pre.src = img.getAttribute('data-new-src');
     });
     var ld = document.getElementById('church-ld');
     if (ld) {
