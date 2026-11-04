@@ -343,8 +343,9 @@ fieldset.field { border: 0; margin: 0 0 22px; padding: 0; }
   .main-nav { background: transparent; padding: 0; border-radius: 0; position: relative; }
   .nav-toggle {
     display: flex; align-items: center; justify-content: center;
-    margin: 8px auto 0; width: 52px; height: 44px;
-    background: none; border: 0; cursor: pointer; color: var(--blue);
+    margin: 0 auto; width: 66.667%; height: 52px;
+    background: rgba(128, 128, 128, .25); border: 0; cursor: pointer; color: var(--blue);
+    border-radius: 0 0 30px 30px;
   }
   .nav-toggle svg { width: 36px; height: 36px; }
   .main-nav ul {
