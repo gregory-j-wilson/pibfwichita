@@ -147,6 +147,31 @@ p:last-child { margin-bottom: 0; }
 }
 .pastor-note .sig { font-weight: 700; margin-top: 1em; }
 
+/* Versículo del Día */
+.daily { margin-top: 25px; display: grid; grid-template-columns: 1fr; gap: 5.5%; }
+.daily.has-photo { grid-template-columns: 1fr 1fr; }
+.daily-verse {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 30px;
+  background: var(--sky);
+  border: 1px solid var(--navy);
+  border-radius: 5px;
+  text-align: center;
+}
+.daily-verse h2 { font-size: 28px; color: var(--navy); margin: 0 0 4px; }
+.daily-date { font-family: var(--sans); font-size: 14px; color: var(--blue); margin: 0 0 18px; }
+.daily-verse blockquote { margin: 0; }
+.daily-text { font-family: var(--serif); font-style: italic; font-size: 24px; line-height: 1.3; color: var(--navy); margin: 0 0 14px; }
+.daily-ref { font-family: var(--sans); font-weight: 700; font-size: 16px; color: var(--navy); margin: 0; }
+.daily-photo { margin: 0; display: flex; flex-direction: column; }
+.daily-photo img {
+  width: 100%; flex: 1; min-height: 260px; object-fit: cover;
+  border: 1px solid var(--navy); border-radius: 5px;
+}
+.daily-photo figcaption { font-size: 12px; margin-top: 6px; text-align: right; }
+.daily-photo figcaption a { color: #777; text-decoration: none; }
+.daily-photo figcaption a:hover { text-decoration: underline; }
+
 .news { background: var(--blue); border-top: 5px solid var(--blue); padding: 28px 0 2px; color: #fff; }
 .news-banner {
   background: rgba(255, 255, 255, .28);
@@ -361,6 +386,17 @@ p:last-child { margin-bottom: 0; }
   gap: 48px 5.5%;
   margin-top: 40px;
 }
+.gallery-filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 36px; }
+.gallery-filters button {
+  font-family: var(--sans); font-size: 15px; font-weight: 500;
+  padding: 8px 16px;
+  border: 1px solid var(--blue); border-radius: 999px;
+  background: #fff; color: var(--blue);
+  cursor: pointer; transition: background .2s, color .2s;
+}
+.gallery-filters button:hover { background: var(--sky); }
+.gallery-filters button[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.gallery-filters button:focus-visible { outline: 3px solid var(--navy); outline-offset: 2px; }
 .gallery figure { margin: 0; }
 .gallery button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
 .gallery img { width: 100%; aspect-ratio: 400 / 284; object-fit: cover; transition: opacity .2s; }
@@ -465,6 +501,10 @@ fieldset.field { border: 0; margin: 0 0 22px; padding: 0; }
   .main-nav a { color: var(--navy); padding: 10px 5%; font-size: 15px; }
 
   .welcome-grid, .poster-pair, .news-item, .about-grid { grid-template-columns: 1fr; gap: 24px; }
+  .daily, .daily.has-photo { grid-template-columns: 1fr; gap: 16px; }
+  .daily-verse { padding: 24px 18px; }
+  .daily-text { font-size: 20px; }
+  .daily-photo img { aspect-ratio: 4 / 3; min-height: 0; flex: none; }
   .welcome-title h1 { font-size: 24px; }
   .pastor-note { font-size: 20px; line-height: 1.35; padding: 22px 18px; }
   .news-banner h2 { font-size: 30px; }
