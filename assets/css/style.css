@@ -55,11 +55,11 @@ p:last-child { margin-bottom: 0; }
 .site-logo img { width: 100%; }
 .header-rule { border: 0; border-top: 2px solid var(--blue); margin: 0; }
 .main-nav {
-  width: 75%;
+  width: 66.667%;
   margin: -1px auto 0;
   padding: 10px 20px;
-  background: rgba(10, 9, 9, .08);
-  border-radius: 0 0 120px 120px;
+  background: rgba(128, 128, 128, .25);
+  border-radius: 0 0 55px 55px;
 }
 .main-nav ul {
   list-style: none; margin: 0; padding: 0;
