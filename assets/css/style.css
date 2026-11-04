@@ -223,6 +223,25 @@ p:last-child { margin-bottom: 0; }
 }
 .aviso-menu[hidden] { display: none; }
 
+/* ---------- Back to top ---------- */
+.to-top {
+  position: fixed; right: 18px; bottom: 18px; z-index: 55;
+  width: 50px; height: 50px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #00002e;
+  color: #ffd9d9;
+  border: 0; border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(0, 0, 30, .35);
+  cursor: pointer;
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity .25s, transform .25s, visibility .25s, background .2s;
+}
+.to-top.show { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { background: #000049; }
+.to-top:focus-visible { outline: 3px solid #ffd9d9; outline-offset: 2px; }
+.to-top svg { width: 26px; height: 26px; }
+@media (max-width: 767px) { .to-top { right: 12px; bottom: 12px; width: 46px; height: 46px; } }
+
 /* ---------- Announcement bell ---------- */
 .aviso-bell {
   position: fixed; top: 14px; right: 14px; z-index: 60;
