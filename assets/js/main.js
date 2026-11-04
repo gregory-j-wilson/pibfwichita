@@ -620,14 +620,32 @@
       });
       return loading;
     }
+    function setCookie(code) {
+      var v = 'googtrans=/es/' + code + '; path=/';
+      document.cookie = v;
+      if (location.hostname && location.hostname.indexOf('.') !== -1) {
+        document.cookie = v + '; domain=.' + location.hostname.replace(/^www\./, '');
+      }
+    }
     function translateTo(code) {
+      // Save the choice the way Google does, so it also applies on reload
+      // and on every other page.
+      setCookie(code);
+      var done = false;
+      // If Google's selector isn't ready within 8 seconds, reload: Google
+      // then translates the page on load from the saved choice.
+      var fallback = setTimeout(function () { if (!done) location.reload(); }, 8000);
       loadGoogle().then(function () {
-        var tries = 0;
         (function apply() {
           var combo = document.querySelector('#gt-element select.goog-te-combo');
-          if (!combo) { if (++tries < 50) setTimeout(apply, 100); return; }
+          // Wait until Google has filled in its language list.
+          if (!combo || !combo.querySelector('option[value="' + code + '"]')) { setTimeout(apply, 150); return; }
+          done = true;
+          clearTimeout(fallback);
           combo.value = code;
-          combo.dispatchEvent(new Event('change'));
+          var evt = document.createEvent('HTMLEvents');
+          evt.initEvent('change', true, true);
+          combo.dispatchEvent(evt);
         })();
       });
     }
