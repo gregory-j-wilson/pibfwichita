@@ -149,4 +149,55 @@
       archive.hidden = false;
     }
   }
+
+  // ---------- Announcement bell (every page) ----------
+  // To post a new announcement: change AVISO.id (so the bell shines again
+  // for everyone) and update the title and images. Spanish goes first.
+  var AVISO = {
+    id: 'ropa-gratis-2026-11',
+    title: 'Ropa Gratis · Clothes Giveaway',
+    images: [
+      { src: 'img/ropa-gratis-2026-esp.jpg', alt: 'Cartel de Ropa Gratis: viernes 6 y sábado 7 de noviembre de 2026, 11 AM a 3 PM, 856 S Green St., Wichita, KS 67211. Ropa, zapatos y trastes. ¡Traiga su propia bolsa y tome lo que necesite!' },
+      { src: 'img/ropa-gratis-2026-eng.jpg', alt: 'Clothes Giveaway poster: Friday November 6 and Saturday November 7, 2026, 11 AM to 3 PM, 856 S Green St., Wichita, KS 67211. Clothes, shoes and dishes. Bring your own bag and take what you need.' }
+    ]
+  };
+  (function () {
+    var script = document.currentScript || document.querySelector('script[src*="main.js"]');
+    var assets = new URL('../', script.src); // .../assets/
+    var key = 'pibf-aviso-visto';
+    var seen = false;
+    try { seen = localStorage.getItem(key) === AVISO.id; } catch (e) {}
+
+    var bell = document.createElement('button');
+    bell.type = 'button';
+    bell.className = 'aviso-bell' + (seen ? '' : ' shine');
+    bell.setAttribute('aria-label', 'Anuncios — ' + AVISO.title);
+    bell.setAttribute('aria-haspopup', 'dialog');
+    bell.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="dot"></span>';
+    document.body.appendChild(bell);
+
+    var dialog = document.createElement('dialog');
+    dialog.className = 'aviso-dialog';
+    dialog.setAttribute('aria-label', AVISO.title);
+    var imgs = AVISO.images.map(function (im) {
+      return '<img src="' + new URL(im.src, assets).href + '" width="1024" height="1536" alt="' + im.alt.replace(/"/g, '&quot;') + '">';
+    }).join('');
+    dialog.innerHTML = '<button type="button" class="aviso-close" aria-label="Cerrar">&times;</button>' +
+      '<div class="aviso-inner"><h2>' + AVISO.title + '</h2><div class="aviso-imgs">' + imgs + '</div></div>';
+    document.body.appendChild(dialog);
+
+    bell.addEventListener('click', function () {
+      bell.classList.remove('shine');
+      try { localStorage.setItem(key, AVISO.id); } catch (e) {}
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+    });
+    function close() {
+      if (typeof dialog.close === 'function') dialog.close();
+      else dialog.removeAttribute('open');
+      bell.focus();
+    }
+    dialog.querySelector('.aviso-close').addEventListener('click', close);
+    dialog.addEventListener('click', function (e) { if (e.target === dialog) close(); });
+  })();
 })();

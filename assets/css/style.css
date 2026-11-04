@@ -166,6 +166,89 @@ p:last-child { margin-bottom: 0; }
   border-bottom: 1px solid #fff;
 }
 .news-item:last-child { border-bottom: 0; margin-bottom: 36px; }
+.news-sub { color: #fff; font-family: var(--sans); font-size: 20px; margin: -28px 0 32px; }
+
+/* "Ver más" toggle for older news */
+.news-more { margin: 4px 0 36px; }
+.news-more > summary { list-style: none; cursor: pointer; font-weight: 700; margin: 8px 0 4px; }
+.news-more > summary::-webkit-details-marker { display: none; }
+.news-more > summary svg { width: 1.1em; height: 1.1em; transition: transform .25s; }
+.news-more[open] > summary svg { transform: rotate(180deg); }
+.news-more .less-label, .news-more[open] .more-label { display: none; }
+.news-more[open] .less-label { display: inline; }
+.news-more .news-item:first-of-type { border-top: 1px solid #fff; margin-top: 24px; }
+.news-more .news-item:last-child { margin-bottom: 0; }
+
+/* ---------- Announcement bell ---------- */
+.aviso-bell {
+  position: fixed; top: 14px; right: 14px; z-index: 60;
+  width: 58px; height: 58px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
+  background: #fff6d6;
+  color: var(--navy);
+  border: 5px solid #f6c21c;
+  border-radius: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 73, .25);
+}
+.aviso-bell svg { width: 28px; height: 28px; position: relative; z-index: 1; }
+.aviso-bell::after {
+  content: ""; position: absolute; inset: -5px;
+  background: linear-gradient(115deg, transparent 25%, rgba(246, 194, 28, .55) 40%, rgba(255, 255, 255, .95) 50%, rgba(246, 194, 28, .55) 60%, transparent 75%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.aviso-bell.shine { animation: bell-glow 2.4s ease-in-out infinite; }
+.aviso-bell.shine::after { animation: bell-shimmer 2.4s ease-in-out infinite; }
+.aviso-bell.shine svg { animation: bell-ring 2.4s ease-in-out infinite; transform-origin: 50% 10%; }
+.aviso-bell .dot {
+  position: absolute; top: 6px; right: 7px; z-index: 2;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--red); border: 2px solid #fff;
+}
+.aviso-bell:not(.shine) .dot { display: none; }
+.aviso-bell:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+@keyframes bell-shimmer { 0% { transform: translateX(-110%); } 60%, 100% { transform: translateX(110%); } }
+@keyframes bell-glow {
+  0%, 100% { box-shadow: 0 2px 10px rgba(0, 0, 73, .25), 0 0 0 0 rgba(246, 194, 28, .55); }
+  50% { box-shadow: 0 2px 10px rgba(0, 0, 73, .25), 0 0 0 8px rgba(246, 194, 28, 0); }
+}
+@keyframes bell-ring {
+  0%, 55%, 100% { transform: rotate(0); }
+  60% { transform: rotate(14deg); } 66% { transform: rotate(-12deg); }
+  72% { transform: rotate(8deg); } 78% { transform: rotate(-5deg); } 84% { transform: rotate(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aviso-bell.shine, .aviso-bell.shine::after, .aviso-bell.shine svg { animation: none; }
+}
+
+.aviso-dialog {
+  width: min(960px, calc(100% - 24px)); max-height: calc(100% - 24px);
+  padding: 0; border: 0; border-radius: 12px;
+  background: var(--blue); color: #fff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .4);
+}
+.aviso-dialog::backdrop { background: rgba(0, 0, 30, .7); }
+.aviso-dialog .aviso-inner { padding: 20px 20px 24px; }
+.aviso-dialog h2 { color: #fff; font-size: 28px; text-align: center; margin: 4px 48px 16px; }
+.aviso-dialog .aviso-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.aviso-dialog img { width: 100%; height: auto; border-radius: 6px; }
+.aviso-close {
+  position: sticky; top: 10px; float: right; margin: 10px 10px -50px 0; z-index: 1;
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff; color: var(--navy); border: 0; cursor: pointer;
+  font-size: 26px; line-height: 1;
+}
+@media (max-width: 767px) {
+  .aviso-bell { top: 10px; right: 10px; width: 50px; height: 50px; }
+  .aviso-bell svg { width: 24px; height: 24px; }
+  .aviso-dialog .aviso-imgs { grid-template-columns: 1fr; }
+  .aviso-dialog h2 { font-size: 22px; }
+  .news-sub { font-size: 17px; margin-top: -20px; }
+}
 .news-item img { width: 100%; border: 1px solid #fff; aspect-ratio: 16 / 9; object-fit: cover; }
 .news-item h3 { color: #fff; font-size: 22px; margin-bottom: .4em; }
 .news-item p { color: #fff; margin-bottom: .9em; }
