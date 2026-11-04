@@ -77,21 +77,93 @@ p:last-child { margin-bottom: 0; }
 .main-nav a:hover { opacity: .7; }
 .main-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
 .nav-toggle { display: none; }
+.main-nav .nav-icon { display: none; }
+.main-nav a.nav-give {
+  padding: 3px 14px;
+  background: var(--navy); color: #fff;
+  border-radius: 6px;
+}
+.main-nav a.nav-give:hover { opacity: 1; background: var(--blue); }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--blue); color: #fff; padding: 16px 0 9px; border-top: 0; }
-.footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 30px; padding: 32px 0; }
-.footer-cross { width: 110px; margin-inline: auto; border-radius: 18px; background: #fff; }
-.footer-info { text-align: center; font-family: var(--sans); font-size: 17px; line-height: 1.45; }
-.footer-info h2 { color: #fff; font-family: var(--sans); font-size: 22px; font-weight: 400; margin: 0 0 .5em; line-height: 1.1; }
-.footer-info a { color: #fff; font-weight: 700; }
-.footer-cta { display: flex; justify-content: center; }
+.footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; align-items: start; gap: 40px; padding: 36px 0 28px; }
+.footer-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.footer-logo { display: block; width: 260px; max-width: 100%; }
+.footer-logo img { width: 100%; height: auto; }
+.footer-address { margin: 0; font-family: var(--sans); font-size: 16px; line-height: 1.45; color: #fff; }
+.footer-address a { color: #fff; font-weight: 700; }
+.footer-col h2 {
+  color: #fff; font-family: var(--sans); font-size: 18px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  margin: 8px 0 14px; padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, .35);
+}
+.footer-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.footer-col a {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 6px 0;
+  color: #fff; text-decoration: none;
+  font-family: var(--sans); font-size: 16px; font-weight: 500;
+}
+.footer-col a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.f-icon { width: 18px; height: 18px; flex: none; opacity: .9; }
+.footer-col a.footer-give {
+  margin-top: 8px; padding: 8px 18px;
+  background: #fff; color: var(--navy);
+  border-radius: 6px; font-weight: 700;
+}
+.footer-col a.footer-give:hover { background: rgba(255, 255, 255, .85); text-decoration: none; }
+.footer-col a.footer-give .f-icon { color: var(--red); opacity: 1; }
 .site-subfooter { background: var(--navy); padding: 13px 0; font-family: var(--sans); font-size: 14px; }
 .subfooter-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--footer-muted); }
 .subfooter-row p { margin: 0; }
 .subfooter-row a { color: var(--footer-link); }
 .subfooter-row .right { color: #5996c1; }
 .subfooter-row .right a:first-child { text-decoration: none; font-weight: 700; }
+
+/* ---------- Donar ---------- */
+.give .container { max-width: 760px; }
+.give-verse { margin: 0 auto 32px; text-align: center; font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.35; color: var(--navy); }
+.give-verse p { margin: 0 0 6px; }
+.give-verse .ref { font-family: var(--sans); font-style: normal; font-weight: 700; font-size: 15px; }
+.give-card {
+  background: #fff; border: 1px solid rgba(0, 0, 73, .15); border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 73, .10);
+  padding: 36px 40px; text-align: center; color: #333;
+}
+.zelle-logo { width: 160px; height: auto; margin: 0 auto 14px; }
+.give-card h2 { font-size: 28px; color: var(--navy); margin-bottom: 10px; }
+.no-fee {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 0 0 18px; padding: 6px 14px;
+  background: #e6f6ea; color: #1b6b34; border-radius: 999px;
+  font-family: var(--sans); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: .03em;
+}
+.no-fee svg { width: 18px; height: 18px; }
+.give-lead { font-size: 17px; margin: 0 0 14px; }
+.zelle-number { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 16px; margin-bottom: 30px; }
+.zelle-number a { font-family: var(--sans); font-weight: 700; font-size: 36px; color: #6d1ed4; text-decoration: none; letter-spacing: .01em; }
+.copy-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border: 1px solid #6d1ed4; border-radius: 6px;
+  background: #fff; color: #6d1ed4; cursor: pointer;
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+}
+.copy-btn:hover { background: #f3ecfd; }
+.copy-btn svg { width: 16px; height: 16px; }
+.give-card h3 { font-size: 20px; color: var(--navy); margin: 0 0 12px; }
+.give-steps { text-align: left; margin: 0 auto 20px; padding-left: 1.4em; max-width: 560px; font-size: 16px; line-height: 1.55; }
+.give-steps li { margin-bottom: 8px; padding-left: 4px; }
+.give-steps li::marker { color: #6d1ed4; font-weight: 700; }
+.give-note { font-size: 14px; color: #666; margin: 0; }
+.give-help { text-align: center; margin-top: 26px; }
+@media (max-width: 767px) {
+  .give-card { padding: 26px 18px; }
+  .give-card h2 { font-size: 23px; }
+  .zelle-number a { font-size: 30px; }
+  .give-verse { font-size: 19px; }
+}
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -489,7 +561,7 @@ fieldset.field { border: 0; margin: 0 0 22px; padding: 0; }
 @media (max-width: 980px) {
   .gallery { grid-template-columns: repeat(3, 1fr); }
   .main-nav { width: 100%; }
-  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
   .subfooter-row { justify-content: center; text-align: center; flex-direction: column; gap: 4px; }
   .service-grid { grid-template-columns: 1fr; }
 }
@@ -517,7 +589,14 @@ fieldset.field { border: 0; margin: 0 0 22px; padding: 0; }
   }
   .main-nav.open ul { display: flex; }
   .main-nav li { border-bottom: 1px solid #a6a6a6; }
-  .main-nav a { color: var(--navy); padding: 10px 5%; font-size: 15px; }
+  .main-nav a { color: var(--navy); padding: 10px 5%; font-size: 15px; display: flex; align-items: center; gap: 12px; }
+  .main-nav .nav-icon { display: block; width: 18px; height: 18px; flex: none; color: var(--blue); }
+  .main-nav li:has(.nav-give) { border-bottom: 0; padding-top: 10px; }
+  .main-nav a.nav-give { color: #fff; padding: 12px 5%; justify-content: center; }
+  .main-nav a.nav-give .nav-icon { color: #ffd9d9; }
+  .footer-brand { align-items: center; text-align: center; }
+  .footer-col { text-align: center; }
+  .footer-col ul { justify-items: center; }
 
   .welcome-grid, .poster-pair, .news-item, .about-grid { grid-template-columns: 1fr; gap: 24px; }
   .daily, .daily.has-photo { grid-template-columns: 1fr; gap: 16px; }

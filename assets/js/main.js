@@ -11,7 +11,7 @@
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
     nav.addEventListener('click', function (e) {
-      if (e.target.tagName === 'A') {
+      if (e.target.closest('a')) {
         nav.classList.remove('open');
         toggle.setAttribute('aria-expanded', 'false');
       }
@@ -379,4 +379,25 @@
       window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
     });
   })();
+
+  // ---------- Copy-to-clipboard buttons (Donar page) ----------
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    var label = btn.querySelector('span') || btn;
+    var original = label.textContent;
+    btn.addEventListener('click', function () {
+      var text = btn.getAttribute('data-copy');
+      var done = function () {
+        label.textContent = '¡Copiado!';
+        setTimeout(function () { label.textContent = original; }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () {});
+      } else {
+        var t = document.createElement('textarea');
+        t.value = text; document.body.appendChild(t); t.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(t);
+      }
+    });
+  });
 })();

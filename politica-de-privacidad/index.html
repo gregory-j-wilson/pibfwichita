@@ -33,13 +33,14 @@
       <nav class="main-nav" aria-label="Menú principal">
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
         <ul id="menu">
-        <li><a href="../">Inicio</a></li>
-        <li><a href="../#novedades">Novedades</a></li>
-        <li><a href="../sobre-nosotros/">Sobre Nosotros</a></li>
-        <li><a href="../nuestras-creencias/">Nuestras Creencias</a></li>
-        <li><a href="../galeria-de-fotos/">Galería de Fotos</a></li>
-        <li><a href="../boletines-semanales/">Boletines Semanales</a></li>
-        <li><a href="../contacto/">Contacto</a></li>
+        <li><a href="../"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span>Inicio</span></a></li>
+        <li><a href="../#novedades"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Novedades</span></a></li>
+        <li><a href="../sobre-nosotros/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Sobre Nosotros</span></a></li>
+        <li><a href="../nuestras-creencias/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span>Nuestras Creencias</span></a></li>
+        <li><a href="../galeria-de-fotos/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Galería de Fotos</span></a></li>
+        <li><a href="../boletines-semanales/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg><span>Boletines Semanales</span></a></li>
+        <li><a href="../contacto/"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><span>Contacto</span></a></li>
+        <li><a href="../donar/" class="nav-give"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>Donar</span></a></li>
         </ul>
       </nav>
     </div>
@@ -68,15 +69,30 @@
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <img class="footer-cross" src="../assets/img/cross.png" width="110" height="110" alt="" loading="lazy">
-      <div class="footer-info">
-        <h2>Primera Iglesia<br>Bautista Fundamental</h2>
-        <p>1127 S Dodge Ave, Wichita, KS 67213<br>
-        <a href="tel:+13167946217"><u>(316) 794-6217</u></a></p>
-      </div>
-      <div class="footer-cta">
+      <div class="footer-brand">
+        <a class="footer-logo" href="../" aria-label="Inicio"><img src="../assets/img/logo-white.png" width="500" height="342" alt="Primera Iglesia Bautista Fundamental de Wichita, KS" loading="lazy"></a>
+        <p class="footer-address">1127 S Dodge Ave, Wichita, KS 67213<br>
+        <a href="tel:+13167946217">(316) 794-6217</a></p>
         <a class="btn btn-bold" href="../contacto/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg> Contacto</a>
       </div>
+      <nav class="footer-col" aria-labelledby="fcol1">
+        <h2 id="fcol1">Nuestra Iglesia</h2>
+        <ul>
+          <li><a href="../"><svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>Inicio</a></li>
+          <li><a href="../sobre-nosotros/"><svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Sobre Nosotros</a></li>
+          <li><a href="../nuestras-creencias/"><svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Nuestras Creencias</a></li>
+          <li><a href="../contacto/"><svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>Contacto</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-labelledby="fcol2">
+        <h2 id="fcol2">Recursos</h2>
+        <ul>
+          <li><a href="../#novedades"><svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Novedades</a></li>
+          <li><a href="../galeria-de-fotos/"><svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>Galería de Fotos</a></li>
+          <li><a href="../boletines-semanales/"><svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Boletines Semanales</a></li>
+          <li><a href="../donar/" class="footer-give"><svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Donar</a></li>
+        </ul>
+      </nav>
     </div>
   </footer>
   <div class="site-subfooter">
