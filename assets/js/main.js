@@ -274,8 +274,6 @@
   // place and description. The bell shimmers and shows a red dot until the
   // visitor has opened every current notification. To add one, copy a block
   // and give it a new, unique `id`.
-  // News items on the home page marked data-until="..." also move under
-  // "Ver más" at that time.
   var AVISOS = [
     {
       id: 'ropa-gratis-2026-11',
@@ -354,17 +352,23 @@
     }
   }
 
-  // Move expired news on the home page under "Ver más" (newest first)
+  // Novedades: the 3 newest events (by data-date, the event's last day)
+  // show on top: upcoming ones soonest first, then past ones newest first.
+  // Everything else goes under "Ver más", newest first. To add an event,
+  // put it anywhere in Novedades with its data-date.
   (function () {
     var more = document.querySelector('.news-more');
     if (!more) return;
-    var summary = more.querySelector('summary');
-    var old = Array.prototype.filter.call(document.querySelectorAll('#novedades [data-until]'), function (el) {
-      return !more.contains(el) && expired(el.getAttribute('data-until'));
-    });
-    // Page order is oldest event first; inserting each right after the button
-    // leaves the most recent one on top.
-    for (var i = 0; i < old.length; i++) summary.insertAdjacentElement('afterend', old[i]);
+    var box = more.parentNode;
+    var now = Date.now();
+    function end(el) { return Date.parse(el.getAttribute('data-date') + 'T23:59:59-06:00'); }
+    var items = Array.prototype.slice.call(box.querySelectorAll('[data-date]'))
+      .sort(function (x, y) { return end(y) - end(x); });
+    var top = items.slice(0, 3);
+    var upcoming = top.filter(function (el) { return end(el) >= now; }).sort(function (x, y) { return end(x) - end(y); });
+    var past = top.filter(function (el) { return end(el) < now; });
+    upcoming.concat(past).forEach(function (el) { box.insertBefore(el, more); });
+    items.slice(3).forEach(function (el) { more.appendChild(el); });
   })();
 
   (function () {
