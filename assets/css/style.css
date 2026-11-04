@@ -299,6 +299,26 @@ font[style] { background: none !important; box-shadow: none !important; }
 .poster-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5%; }
 .poster-pair img { width: 100%; }
 .poster-single { max-width: 480px; margin: 0 auto; }
+/* Español / English switch for poster pairs */
+.lang-switch {
+  display: inline-flex; gap: 0; margin: 0 auto 18px;
+  padding: 4px; background: #fff; border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 30, .25);
+}
+.lang-switch button {
+  padding: 8px 20px; border: 0; border-radius: 999px;
+  background: transparent; color: var(--navy);
+  font-family: var(--sans); font-size: 16px; font-weight: 600;
+  cursor: pointer; transition: background .2s, color .2s;
+}
+.lang-switch button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+.lang-switch button:focus-visible { outline: 3px solid #f6c21c; outline-offset: 2px; }
+.poster-pair.poster-toggle, .aviso-dialog .aviso-imgs.poster-toggle {
+  display: block; max-width: 480px; margin-inline: auto;
+}
+.poster-toggle img[hidden] { display: none; }
+.aviso-dialog .aviso-inner { text-align: center; }
+.aviso-dialog .aviso-imgs.poster-toggle { max-width: 520px; text-align: left; }
 .poster-single img { width: 100%; }
 .news-item {
   display: grid; grid-template-columns: 1fr 2fr; gap: 5.5%;
@@ -435,7 +455,7 @@ font[style] { background: none !important; box-shadow: none !important; }
 .aviso-dialog img { width: 100%; height: auto; border-radius: 6px; }
 .aviso-dialog .aviso-imgs.one { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
 .aviso-dialog:has(.aviso-details) { width: min(560px, calc(100% - 24px)); }
-.aviso-details { background: #fff; color: var(--navy); border-radius: 8px; padding: 20px 22px; font-family: var(--sans); }
+.aviso-details { text-align: left; background: #fff; color: var(--navy); border-radius: 8px; padding: 20px 22px; font-family: var(--sans); }
 .aviso-row { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 10px; font-size: 17px; font-weight: 600; }
 .aviso-row svg { width: 20px; height: 20px; flex: none; margin-top: 2px; color: var(--blue); }
 .aviso-desc { margin: 14px 0 0; font-size: 16px; line-height: 1.5; color: #333; }

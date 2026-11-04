@@ -267,6 +267,37 @@
     }).catch(function () { fig.hidden = true; });
   })();
 
+  // ---------- Español / English poster toggle ----------
+  // A box holding two posters (Spanish first, then English) shows one at a
+  // time with a two-button switch above it. Visitors who picked another
+  // language in the language menu start on the English poster.
+  function posterToggle(box) {
+    var imgs = box.querySelectorAll('img');
+    if (imgs.length !== 2 || box.getAttribute('data-toggled')) return;
+    box.setAttribute('data-toggled', '1');
+    box.classList.add('poster-toggle');
+    var m = document.cookie.match(/(?:^|;\s*)googtrans=\/[^\/]*\/([^;]+)/);
+    var start = m && m[1] !== 'es' ? 1 : 0;
+    var bar = document.createElement('div');
+    bar.className = 'lang-switch notranslate';
+    bar.setAttribute('translate', 'no');
+    bar.setAttribute('role', 'group');
+    bar.setAttribute('aria-label', 'Idioma del cartel / Poster language');
+    bar.innerHTML = '<button type="button" lang="es">Español</button><button type="button" lang="en">English</button>';
+    var btns = bar.querySelectorAll('button');
+    function show(i) {
+      for (var k = 0; k < 2; k++) {
+        imgs[k].hidden = k !== i;
+        btns[k].setAttribute('aria-pressed', String(k === i));
+      }
+    }
+    btns[0].addEventListener('click', function () { show(0); });
+    btns[1].addEventListener('click', function () { show(1); });
+    box.parentNode.insertBefore(bar, box);
+    show(start);
+  }
+  document.querySelectorAll('.poster-pair').forEach(posterToggle);
+
   // ---------- Notifications bell (every page) ----------
   // Each notification shows in the bell's drop-down until its `until` time
   // (Wichita time, CST = -06:00), soonest first. "Abrir" opens it: the
@@ -454,6 +485,8 @@
       dialog.innerHTML = '<button type="button" class="aviso-close" aria-label="Cerrar">&times;</button>' +
         '<div class="aviso-inner"><h2>' + esc(a.title) + '</h2>' + body + '</div>';
       dialog.querySelector('.aviso-close').addEventListener('click', closeDialog);
+      var pair = dialog.querySelector('.aviso-imgs');
+      if (pair) posterToggle(pair);
       markRead(a);
       updateBell();
       setOpen(false);
