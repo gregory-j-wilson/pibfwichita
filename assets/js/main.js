@@ -332,6 +332,28 @@
     return !isNaN(t) && Date.now() >= t;
   }
 
+  // ---------- Church address change (every page) ----------
+  // From midnight Nov 12 (Wichita time) every address marked data-address,
+  // and the address Google reads on the home page, shows the new building.
+  var MUDANZA = {
+    at: '2026-11-12T00:00:00-06:00',
+    text: '856 S Green St, Wichita, KS 67211',
+    street: '856 S Green St',
+    zip: '67211'
+  };
+  if (expired(MUDANZA.at)) {
+    document.querySelectorAll('[data-address]').forEach(function (el) { el.textContent = MUDANZA.text; });
+    var ld = document.getElementById('church-ld');
+    if (ld) {
+      try {
+        var data = JSON.parse(ld.textContent);
+        data.address.streetAddress = MUDANZA.street;
+        data.address.postalCode = MUDANZA.zip;
+        ld.textContent = JSON.stringify(data);
+      } catch (e) {}
+    }
+  }
+
   // Move expired news on the home page under "Ver más" (newest first)
   (function () {
     var more = document.querySelector('.news-more');
@@ -340,7 +362,9 @@
     var old = Array.prototype.filter.call(document.querySelectorAll('#novedades [data-until]'), function (el) {
       return !more.contains(el) && expired(el.getAttribute('data-until'));
     });
-    for (var i = old.length - 1; i >= 0; i--) summary.insertAdjacentElement('afterend', old[i]);
+    // Page order is oldest event first; inserting each right after the button
+    // leaves the most recent one on top.
+    for (var i = 0; i < old.length; i++) summary.insertAdjacentElement('afterend', old[i]);
   })();
 
   (function () {

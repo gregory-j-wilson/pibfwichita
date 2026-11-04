@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
-  <script type="application/ld+json">
+  <script type="application/ld+json" id="church-ld">
   {"@context":"https://schema.org","@type":"Church","name":"Primera Iglesia Bautista Fundamental","url":"https://pibfwichita.com/","telephone":"+1-316-794-6217","email":"iglesiabautista@pibfwichita.com","address":{"@type":"PostalAddress","streetAddress":"1127 S Dodge Ave","addressLocality":"Wichita","addressRegion":"KS","postalCode":"67213","addressCountry":"US"}}
   </script>
 </head>
@@ -55,7 +55,7 @@
         <div class="welcome-grid">
           <figure class="welcome-photo" style="margin:0">
             <img src="assets/img/church.jpg" width="700" height="394" alt="El edificio de la Primera Iglesia Bautista Fundamental en Wichita">
-            <p>Nuestra Iglesia ~ 1127 S Dodge Ave, Wichita, KS 67213</p>
+            <p>Nuestra Iglesia ~ <span data-address>1127 S Dodge Ave, Wichita, KS 67213</span></p>
           </figure>
           <div class="welcome-title">
             <h1>Bienvenidos a la Primera Iglesia Bautista Fundamental de Wichita, Kansas!</h1>
@@ -93,6 +93,23 @@
           <div class="poster-pair">
             <img src="assets/img/ropa-gratis-2026-esp.jpg" width="1024" height="1536" alt="Cartel de Ropa Gratis: viernes 6 y sábado 7 de noviembre de 2026, 11 AM a 3 PM, 856 S Green St., Wichita, KS 67211. Ropa, zapatos y trastes. ¡Traiga su propia bolsa y tome lo que necesite!" loading="lazy">
             <img src="assets/img/ropa-gratis-2026-eng.jpg" width="1024" height="1536" alt="Clothes Giveaway poster: Friday November 6 and Saturday November 7, 2026, 11 AM to 3 PM, 856 S Green St., Wichita, KS 67211. Clothes, shoes and dishes. Bring your own bag and take what you need." loading="lazy">
+          </div>
+        </div>
+
+        <div class="news-feature" data-until="2026-11-13T00:00:00-06:00">
+          <h2>Inauguración de Nuestro Edificio</h2>
+          <p class="news-sub">Jueves 12 de noviembre, 2026 · 6:30 p.m. · 856 S. Green St.</p>
+          <div class="poster-single">
+            <img src="assets/img/inauguracion-2026.jpg" width="1024" height="1536" alt="Cartel de la Inauguración de nuestro edificio: jueves 12 de noviembre, 6:30 p.m., 856 S. Green St., Wichita, KS 67211. Habrá una ligera cena después del servicio. Si necesita transportación, favor de llamar al 316-794-6217. 1 Samuel 7:12: “Hasta aquí nos ayudó Jehová.”" loading="lazy">
+          </div>
+        </div>
+
+        <div class="news-feature" data-until="2026-11-15T00:00:00-06:00">
+          <h2>Conferencia de Fundamentos</h2>
+          <p class="news-sub">Viernes 13 (6:30 p.m.) y sábado 14 de noviembre (10:00 a.m.), 2026</p>
+          <div class="poster-pair">
+            <img src="assets/img/conferencia-fundamentos-2026-esp.jpg" width="1024" height="1536" alt="Cartel de la Conferencia de Fundamentos, 2 Timoteo 2:19: viernes 13 de noviembre a las 6:30 PM con cena ligera al terminar, y sábado 14 de noviembre a las 10:00 AM con almuerzo al final. 856 S. Green St., Wichita, KS." loading="lazy">
+            <img src="assets/img/conferencia-fundamentos-2026-eng.jpg" width="1024" height="1536" alt="Fundamental Conference poster, 2 Timothy 2:19: Friday November 13 at 6:30 PM with dinner afterward, and Saturday November 14 at 10:00 AM with lunch at the end. 856 S. Green St., Wichita, KS." loading="lazy">
           </div>
         </div>
 
@@ -162,7 +179,7 @@
     <div class="container footer-grid">
       <div class="footer-brand">
         <a class="footer-logo" href="./" aria-label="Inicio"><img src="assets/img/logo-white.png" width="500" height="342" alt="Primera Iglesia Bautista Fundamental de Wichita, KS" loading="lazy"></a>
-        <p class="footer-address">1127 S Dodge Ave, Wichita, KS 67213<br>
+        <p class="footer-address"><span data-address>1127 S Dodge Ave, Wichita, KS 67213</span><br>
         <a href="tel:+13167946217">(316) 794-6217</a></p>
         <a class="btn btn-bold" href="contacto/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg> Contacto</a>
       </div>

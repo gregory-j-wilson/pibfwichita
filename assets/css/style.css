@@ -257,6 +257,8 @@ p:last-child { margin-bottom: 0; }
 .news-feature h2 { color: #fff; font-size: 50px; margin-bottom: 40px; }
 .poster-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5%; }
 .poster-pair img { width: 100%; }
+.poster-single { max-width: 480px; margin: 0 auto; }
+.poster-single img { width: 100%; }
 .news-item {
   display: grid; grid-template-columns: 1fr 2fr; gap: 5.5%;
   padding: 31px 0;
