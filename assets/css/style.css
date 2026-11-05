@@ -165,13 +165,8 @@ font[style] { background: none !important; box-shadow: none !important; }
 
 /* ---------- Música ---------- */
 .music .container { max-width: 1080px; }
-.music-intro { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; margin: 10px 0 56px; }
-.music-copy { font-size: 17px; line-height: 1.6; color: #333; }
-.music-copy p { margin: 0 0 14px; }
-.music-lead { font-family: var(--serif); font-style: italic; font-size: 23px; line-height: 1.35; color: var(--navy); }
-.music-photo { margin: 0; }
-.music-photo img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 8px 28px rgba(0, 0, 73, .18); }
-.music-photo figcaption { margin-top: 10px; text-align: center; font-family: var(--sans); font-weight: 600; color: var(--navy); }
+.music-verse { max-width: 760px; margin: 0 auto 32px; text-align: center; font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.4; color: var(--navy); }
+.music-verse span { display: block; margin-top: 6px; font-family: var(--sans); font-style: normal; font-weight: 700; font-size: 15px; }
 .hymns { background: var(--navy); color: #fff; border-radius: 14px; padding: 34px 32px 26px; }
 .hymns-head { max-width: 760px; margin: 0 auto 24px; text-align: center; }
 .hymns .hymns-kicker { margin: 0 0 4px; color: #f6c21c; font-family: var(--sans); font-weight: 700; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; }
@@ -229,14 +224,13 @@ font[style] { background: none !important; box-shadow: none !important; }
 .hp-dur { color: #b9c0ea; font-size: 13px; }
 .hp-empty { color: #b9c0ea; font-family: var(--sans); text-align: center; margin: 16px 0; }
 @media (max-width: 900px) {
-  .music-intro { grid-template-columns: 1fr; gap: 26px; }
   .hymn-player.ready { grid-template-columns: 1fr; }
   .hp-list { max-height: 380px; }
 }
 @media (max-width: 767px) {
   .hymns { padding: 26px 14px 20px; margin-inline: -4px; }
   .hymns-head h2 { font-size: 26px; }
-  .music-lead { font-size: 20px; }
+  .music-verse { font-size: 19px; }
   .hymn-start-icon { width: 60px; height: 60px; }
   .hymn-start-icon svg { width: 30px; height: 30px; }
   .hymn-start-text strong { font-size: 18px; }
