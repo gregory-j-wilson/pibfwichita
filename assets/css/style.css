@@ -180,26 +180,28 @@ font[style] { background: none !important; box-shadow: none !important; }
 .hymns-head strong { color: #fff; }
 .hymns-note { margin: 14px 0 0; text-align: center; font-size: 13px; color: #b9c0ea; }
 .hymns-note a { color: #fff; }
-/* Before playing: a designed cover with a big play button */
-.hymn-start {
-  display: flex; align-items: center; justify-content: center; gap: 18px;
-  width: 100%; min-height: 220px; padding: 24px;
-  border: 2px solid rgba(246, 194, 28, .7); border-radius: 12px; cursor: pointer;
+.hymns-fallback { text-align: center; }
+.hymns-fallback a { color: #fff; }
+/* Player + list */
+.hymn-player.ready { display: grid; grid-template-columns: 1.6fr 1fr; gap: 18px; align-items: start; }
+.hp-video { position: relative; aspect-ratio: 16 / 9; background: #000; border-radius: 12px; overflow: hidden; }
+.hp-video iframe, .hp-video #hp-yt { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.hp-cover {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
   background: radial-gradient(ellipse at 30% 20%, #2b3ab8 0%, #0b1470 55%, #00002e 100%);
-  color: #fff; text-align: left; font-family: var(--sans);
-  transition: transform .2s, box-shadow .2s;
+  border: 2px solid rgba(246, 194, 28, .7); border-radius: 12px; padding: 16px;
 }
-.hymn-start:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
-.hymn-start:focus-visible { outline: 3px solid #f6c21c; outline-offset: 3px; }
-.hymn-start-icon { width: 78px; height: 78px; flex: none; border-radius: 50%; background: #f6c21c; color: var(--navy); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 8px rgba(246, 194, 28, .25); }
+.hp-cover-play { display: flex; align-items: center; gap: 18px; border: 0; background: none; color: #fff; text-align: left; cursor: pointer; font-family: var(--sans); padding: 8px; border-radius: 12px; }
+.hp-cover-play:hover .hymn-start-icon { transform: scale(1.06); }
+.hp-cover-play:focus-visible, .hp-cover-random:focus-visible { outline: 3px solid #f6c21c; outline-offset: 3px; }
+.hymn-start-icon { width: 78px; height: 78px; flex: none; border-radius: 50%; background: #f6c21c; color: var(--navy); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 8px rgba(246, 194, 28, .25); transition: transform .2s; }
 .hymn-start-icon svg { width: 40px; height: 40px; margin-left: 4px; }
 .hymn-start-text { display: flex; flex-direction: column; gap: 4px; }
 .hymn-start-text strong { font-size: 24px; }
-.hymn-start-text span { color: #c9cff5; font-size: 15px; }
-/* After playing: player + list */
-.hymn-player.loaded { display: grid; grid-template-columns: 1.7fr 1fr; gap: 18px; align-items: start; }
-.hp-video { position: relative; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; }
-.hp-video iframe, .hp-video #hp-yt { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.hymn-start-text span { color: #c9cff5; font-size: 16px; }
+.hp-cover-random { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .45); background: rgba(255, 255, 255, .08); color: #fff; font: 600 15px var(--sans); cursor: pointer; }
+.hp-cover-random:hover { background: rgba(255, 255, 255, .18); }
+.hp-cover-random svg { width: 18px; height: 18px; }
 .hp-now { margin: 12px 0 8px; font-family: var(--sans); font-size: 17px; font-weight: 600; color: #fff; }
 .hp-now-label { color: #f6c21c; }
 .hp-controls { display: flex; align-items: center; gap: 8px; }
@@ -210,30 +212,36 @@ font[style] { background: none !important; box-shadow: none !important; }
 .hp-btn.hp-play:hover { background: #ffd447; }
 .hp-btn.hp-shuffle[aria-pressed="true"] { background: #f6c21c; color: var(--navy); }
 .hp-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
-.hp-count { margin-left: auto; color: #b9c0ea; font-family: var(--sans); font-size: 14px; }
-.hp-side { background: rgba(255, 255, 255, .06); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; }
+.hp-side { background: rgba(255, 255, 255, .06); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; }
+.hp-search-row { display: flex; align-items: center; gap: 10px; }
+.hp-search { flex: 1; }
 .hp-search input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 0; font: 15px var(--sans); color: var(--navy); }
-.hp-list { list-style: none; margin: 10px 0 0; padding: 0; max-height: 440px; overflow-y: auto; }
+.hp-total { color: #b9c0ea; font: 600 13px var(--sans); white-space: nowrap; }
+.hp-list { list-style: none; margin: 10px 0 0; padding: 0 4px 0 0; max-height: 470px; overflow-y: auto; scrollbar-color: rgba(255,255,255,.35) transparent; }
 .hp-list li { margin: 0; }
-.hp-loading { padding: 16px; color: #b9c0ea; font-family: var(--sans); }
-.hp-item { display: grid; grid-template-columns: 30px 96px 1fr; gap: 10px; align-items: center; width: 100%; padding: 6px; border: 0; border-radius: 8px; background: transparent; color: #fff; text-align: left; cursor: pointer; font-family: var(--sans); }
+.hp-list li[hidden] { display: none; }
+.hp-item { display: grid; grid-template-columns: 46px 1fr auto; gap: 10px; align-items: center; width: 100%; padding: 8px 8px; border: 0; border-radius: 8px; background: transparent; color: #fff; text-align: left; cursor: pointer; font-family: var(--sans); }
 .hp-item:hover { background: rgba(255, 255, 255, .1); }
 .hp-item.current { background: rgba(246, 194, 28, .2); box-shadow: inset 3px 0 0 #f6c21c; }
-.hp-item img { width: 96px; height: 54px; object-fit: cover; border-radius: 5px; background: #222; }
-.hp-num { text-align: right; color: #b9c0ea; font-size: 14px; font-weight: 600; }
-.hp-item.current .hp-num { color: #f6c21c; }
+.hp-num { justify-self: center; min-width: 38px; padding: 3px 6px; border-radius: 6px; background: rgba(255, 255, 255, .12); color: #fff; font-size: 13px; font-weight: 700; text-align: center; }
+.hp-item.current .hp-num { background: #f6c21c; color: var(--navy); }
 .hp-title { font-size: 15px; line-height: 1.3; }
+.hp-dur { color: #b9c0ea; font-size: 13px; }
+.hp-empty { color: #b9c0ea; font-family: var(--sans); text-align: center; margin: 16px 0; }
 @media (max-width: 900px) {
   .music-intro { grid-template-columns: 1fr; gap: 26px; }
-  .hymn-player.loaded { grid-template-columns: 1fr; }
-  .hp-list { max-height: 360px; }
+  .hymn-player.ready { grid-template-columns: 1fr; }
+  .hp-list { max-height: 380px; }
 }
 @media (max-width: 767px) {
   .hymns { padding: 26px 14px 20px; margin-inline: -4px; }
   .hymns-head h2 { font-size: 26px; }
   .music-lead { font-size: 20px; }
-  .hymn-start { flex-direction: column; text-align: center; min-height: 200px; }
-  .hymn-start-text strong { font-size: 20px; }
+  .hymn-start-icon { width: 60px; height: 60px; }
+  .hymn-start-icon svg { width: 30px; height: 30px; }
+  .hymn-start-text strong { font-size: 18px; }
+  .hymn-start-text span { font-size: 14px; }
+  .hp-cover { gap: 10px; }
 }
 
 /* ---------- Donar ---------- */

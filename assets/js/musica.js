@@ -1,77 +1,105 @@
-/* Música page: custom hymn player for a YouTube playlist.
-   Nothing loads from YouTube until the visitor presses play. Then the
-   YouTube player (privacy-enhanced mode) loads the playlist, and a numbered,
-   searchable list of hymns is built from it. Titles come from YouTube as each
-   hymn plays, and are also looked up in the background where the browser
-   allows it; they are remembered in this browser for a week. */
+/* Música page: hymn player for the Himnario Bautista (rojo) tracks.
+   The full, numbered hymn list (assets/js/himnos.js) shows right away and
+   can be searched by number or title. Nothing loads from YouTube until a
+   hymn is played; the video then plays in YouTube's privacy-enhanced mode.
+   When a hymn ends, the next one plays (in hymnal order, or at random with
+   shuffle on). The last hymn played is remembered in this browser. */
 (function () {
   'use strict';
   var box = document.querySelector('.hymn-player');
-  if (!box) return;
-  var LIST = box.getAttribute('data-playlist');
-  var KEY = 'pibf-himnos-titulos';
-  var WEEK = 7 * 24 * 3600 * 1000;
+  var H = window.HIMNOS;
+  if (!box || !H || !H.length) return;
+  var LAST = 'pibf-himno-ultimo';
 
-  var titles = {};
-  try {
-    var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (saved && saved.t && Date.now() - saved.at < WEEK) titles = saved.t;
-  } catch (e) {}
-  function saveTitles() {
-    try { localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), t: titles })); } catch (e) {}
-  }
-  function clean(t) {
-    // "123. Santo, Santo, Santo - Himnario Bautista" -> "Santo, Santo, Santo"
-    return String(t || '')
-      .replace(/\s*[-|–—]\s*(himnario bautista.*|himno.*bautista.*)$/i, '')
-      .replace(/^\s*(himno\s*)?#?\d+\s*[.\-–:)]\s*/i, '')
-      .trim();
-  }
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
-  }
   var ICON = {
     prev: '<path d="M6 6h2v12H6zM9.5 12 18 18V6z"/>',
     next: '<path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/>',
     play: '<path d="M8 5v14l11-7z"/>',
     pause: '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>',
-    shuffle: '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>'
+    shuffle: '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>',
+    dice: '<rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.6"/><circle cx="15.5" cy="15.5" r="1.6"/><circle cx="15.5" cy="8.5" r="1.6"/><circle cx="8.5" cy="15.5" r="1.6"/><circle cx="12" cy="12" r="1.6"/>'
   };
-  function svg(name) { return '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + ICON[name] + '</svg>'; }
+  function svg(n) { return '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + ICON[n] + '</svg>'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function fold(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
 
-  var player, ids = [], items = [], current = -1, shuffle = false, target = -1;
-  function randomOther() {
-    if (ids.length < 2) return 0;
-    var r; do { r = Math.floor(Math.random() * ids.length); } while (r === current);
-    return r;
-  }
-  function jumpTo(i) { target = i; player.playVideoAt(i); }
+  var last = -1;
+  try { var l = JSON.parse(localStorage.getItem(LAST) || 'null'); if (l) last = H.findIndex(function (h) { return h[2] === l; }); } catch (e) {}
 
-  function start() {
-    box.classList.add('loaded');
-    box.innerHTML =
-      '<div class="hp-main">' +
-        '<div class="hp-video"><div id="hp-yt"></div></div>' +
-        '<div class="hp-now"><span class="hp-now-label">Ahora:</span> <span class="hp-now-title">Cargando…</span></div>' +
-        '<div class="hp-controls">' +
-          '<button type="button" class="hp-btn" data-act="prev" aria-label="Himno anterior">' + svg('prev') + '</button>' +
-          '<button type="button" class="hp-btn hp-play" data-act="toggle" aria-label="Pausar">' + svg('pause') + '</button>' +
-          '<button type="button" class="hp-btn" data-act="next" aria-label="Siguiente himno">' + svg('next') + '</button>' +
-          '<button type="button" class="hp-btn hp-shuffle" data-act="shuffle" aria-pressed="false" aria-label="Orden aleatorio">' + svg('shuffle') + '</button>' +
-          '<span class="hp-count" aria-live="polite"></span>' +
+  var startAt = last >= 0 ? last : 0;
+  box.classList.add('ready');
+  box.innerHTML =
+    '<div class="hp-main">' +
+      '<div class="hp-video">' +
+        '<div class="hp-cover">' +
+          '<button type="button" class="hp-cover-play" data-i="' + startAt + '">' +
+            '<span class="hymn-start-icon" aria-hidden="true">' + svg('play') + '</span>' +
+            '<span class="hymn-start-text"><strong>' + (last >= 0 ? 'Continuar donde se quedó' : 'Reproducir los himnos') + '</strong>' +
+            '<span>' + H[startAt][0] + '. ' + esc(H[startAt][1]) + '</span></span>' +
+          '</button>' +
+          '<button type="button" class="hp-cover-random">' + svg('dice') + ' Himno al azar</button>' +
         '</div>' +
       '</div>' +
-      '<div class="hp-side">' +
-        '<label class="hp-search"><span class="sr-only">Buscar himno</span>' +
-          '<input type="search" placeholder="Buscar himno…" autocomplete="off"></label>' +
-        '<ol class="hp-list" aria-label="Lista de himnos"><li class="hp-loading">Cargando la lista…</li></ol>' +
-      '</div>';
-    box.querySelector('.hp-controls').addEventListener('click', onControl);
-    box.querySelector('.hp-search input').addEventListener('input', filter);
+      '<div class="hp-now" aria-live="polite"><span class="hp-now-label">Ahora:</span> <span class="hp-now-title">Elija un himno de la lista</span></div>' +
+      '<div class="hp-controls">' +
+        '<button type="button" class="hp-btn" data-act="prev" aria-label="Himno anterior">' + svg('prev') + '</button>' +
+        '<button type="button" class="hp-btn hp-play" data-act="toggle" aria-label="Reproducir">' + svg('play') + '</button>' +
+        '<button type="button" class="hp-btn" data-act="next" aria-label="Siguiente himno">' + svg('next') + '</button>' +
+        '<button type="button" class="hp-btn hp-shuffle" data-act="shuffle" aria-pressed="false" aria-label="Orden aleatorio">' + svg('shuffle') + '</button>' +
+        '<button type="button" class="hp-btn" data-act="random" aria-label="Himno al azar">' + svg('dice') + '</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="hp-side">' +
+      '<div class="hp-search-row">' +
+        '<label class="hp-search"><span class="sr-only">Buscar por número o título</span>' +
+          '<input type="search" placeholder="Buscar por número o título…" autocomplete="off" inputmode="search"></label>' +
+        '<span class="hp-total">' + H.length + ' himnos</span>' +
+      '</div>' +
+      '<ol class="hp-list" aria-label="Lista de himnos">' +
+        H.map(function (h, i) {
+          return '<li><button type="button" class="hp-item" data-i="' + i + '">' +
+            '<span class="hp-num">' + h[0] + '</span>' +
+            '<span class="hp-title">' + esc(h[1]) + '</span>' +
+            '<span class="hp-dur">' + esc(h[3]) + '</span></button></li>';
+        }).join('') +
+      '</ol>' +
+      '<p class="hp-empty" hidden>No se encontró ningún himno.</p>' +
+    '</div>';
 
-    if (window.YT && window.YT.Player) return makePlayer();
-    var prev = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = function () { if (prev) prev(); makePlayer(); };
+  var list = box.querySelector('.hp-list');
+  var items = Array.prototype.slice.call(list.querySelectorAll('.hp-item'));
+  var index = H.map(function (h) { return fold(h[0] + ' ' + h[1]); });
+  var player = null, ready = false, current = -1, shuffle = false, pending = -1, apiLoading = false;
+
+  function random() {
+    if (H.length < 2) return 0;
+    var r; do { r = Math.floor(Math.random() * H.length); } while (r === current);
+    return r;
+  }
+
+  function play(i) {
+    current = i;
+    mark();
+    try { localStorage.setItem(LAST, JSON.stringify(H[i][2])); } catch (e) {}
+    if (ready) { player.loadVideoById(H[i][2]); return; }
+    pending = i;
+    if (apiLoading) return;
+    apiLoading = true;
+    box.querySelector('.hp-video').innerHTML = '<div id="hp-yt"></div>';
+    var go = function () {
+      player = new YT.Player('hp-yt', {
+        host: 'https://www.youtube-nocookie.com',
+        videoId: H[pending][2],
+        playerVars: { autoplay: 1, rel: 0, playsinline: 1, modestbranding: 1 },
+        events: {
+          onReady: function () { ready = true; if (pending !== current) player.loadVideoById(H[current][2]); },
+          onStateChange: onState
+        }
+      });
+    };
+    if (window.YT && window.YT.Player) return go();
+    var prevCb = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () { if (prevCb) prevCb(); go(); };
     var s = document.createElement('script');
     s.src = 'https://www.youtube.com/iframe_api';
     s.onerror = function () {
@@ -80,125 +108,60 @@
     document.head.appendChild(s);
   }
 
-  function makePlayer() {
-    player = new YT.Player('hp-yt', {
-      host: 'https://www.youtube-nocookie.com',
-      playerVars: { listType: 'playlist', list: LIST, autoplay: 1, rel: 0, playsinline: 1, modestbranding: 1 },
-      events: { onReady: onReady, onStateChange: onState }
-    });
-  }
-
-  function onReady() {
-    var tries = 0;
-    (function waitList() {
-      var pl = player.getPlaylist && player.getPlaylist();
-      if (pl && pl.length) { ids = pl; buildList(); return; }
-      if (++tries < 60) setTimeout(waitList, 250);
-      else box.querySelector('.hp-list').innerHTML = '<li class="hp-loading">No se pudo cargar la lista.</li>';
-    })();
-  }
-
-  function buildList() {
-    var list = box.querySelector('.hp-list');
-    list.innerHTML = ids.map(function (id, i) {
-      var t = titles[id] ? esc(titles[id]) : 'Himno ' + (i + 1);
-      return '<li><button type="button" class="hp-item" data-i="' + i + '">' +
-        '<span class="hp-num">' + (i + 1) + '</span>' +
-        '<img src="https://i.ytimg.com/vi/' + id + '/mqdefault.jpg" alt="" width="96" height="54" loading="lazy">' +
-        '<span class="hp-title">' + t + '</span></button></li>';
-    }).join('');
-    items = Array.prototype.slice.call(list.querySelectorAll('.hp-item'));
-    list.addEventListener('click', function (e) {
-      var b = e.target.closest('.hp-item');
-      if (b) jumpTo(+b.getAttribute('data-i'));
-    });
-    markCurrent();
-    fetchTitles();
-  }
-
-  // Background title lookup (YouTube's public oEmbed). If the browser blocks
-  // it, the list keeps "Himno N" and fills in titles as hymns play.
-  function fetchTitles() {
-    if (!window.fetch) return;
-    var todo = ids.filter(function (id) { return !titles[id]; });
-    var running = 0, idx = 0, failed = 0;
-    function nextOne() {
-      if (failed > 3) return;
-      while (running < 4 && idx < todo.length) {
-        var id = todo[idx++];
-        running++;
-        fetch('https://www.youtube.com/oembed?format=json&url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + id))
-          .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-          .then((function (vid) { return function (j) { setTitle(vid, j.title); }; })(id))
-          .catch(function () { failed++; })
-          .then(function () { running--; if (idx >= todo.length && !running) saveTitles(); nextOne(); });
-      }
-    }
-    nextOne();
-  }
-
-  function setTitle(id, raw) {
-    var t = clean(raw);
-    if (!t) return;
-    titles[id] = t;
-    var i = ids.indexOf(id);
-    if (i !== -1 && items[i]) items[i].querySelector('.hp-title').textContent = t;
-    if (i === current) box.querySelector('.hp-now-title').textContent = (i + 1) + '. ' + t;
-  }
-
   function onState(e) {
-    var playBtn = box.querySelector('.hp-play');
     var playing = e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.BUFFERING;
-    playBtn.innerHTML = svg(playing ? 'pause' : 'play');
-    playBtn.setAttribute('aria-label', playing ? 'Pausar' : 'Reproducir');
-    var i = player.getPlaylistIndex ? player.getPlaylistIndex() : -1;
-    // Shuffle: when YouTube moves on to the next hymn by itself, jump to a
-    // random one instead (the list keeps its real order and numbers).
-    if (shuffle && target === -1 && i === current + 1 && current >= 0) { jumpTo(randomOther()); return; }
-    if (i === target) target = -1;
-    if (i !== current && i >= 0) { current = i; markCurrent(); }
-    var d = player.getVideoData && player.getVideoData();
-    if (d && d.video_id && d.title) { setTitle(d.video_id, d.title); saveTitles(); }
+    var b = box.querySelector('.hp-play');
+    b.innerHTML = svg(playing ? 'pause' : 'play');
+    b.setAttribute('aria-label', playing ? 'Pausar' : 'Reproducir');
+    if (e.data === YT.PlayerState.ENDED) next();
   }
 
-  function markCurrent() {
+  function next() { play(shuffle ? random() : (current + 1) % H.length); }
+  function prev() { play(current <= 0 ? H.length - 1 : current - 1); }
+
+  function mark() {
     items.forEach(function (b, i) {
-      b.classList.toggle('current', i === current);
-      if (i === current) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+      var on = i === current;
+      b.classList.toggle('current', on);
+      if (on) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
     });
     var b = items[current];
-    if (b) {
-      var list = box.querySelector('.hp-list');
+    if (b && !b.parentNode.hidden) {
       var top = b.parentNode.offsetTop - list.offsetTop;
-      if (top < list.scrollTop || top > list.scrollTop + list.clientHeight - 60) list.scrollTop = top - 8;
-      var t = titles[ids[current]];
-      box.querySelector('.hp-now-title').textContent = (current + 1) + '. ' + (t || 'Himno ' + (current + 1));
+      if (top < list.scrollTop || top > list.scrollTop + list.clientHeight - 50) list.scrollTop = top - 8;
     }
-    if (ids.length) box.querySelector('.hp-count').textContent = (current >= 0 ? current + 1 : 1) + ' de ' + ids.length;
+    box.querySelector('.hp-now-title').textContent = H[current][0] + '. ' + H[current][1];
   }
 
-  function filter(e) {
-    var q = e.target.value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    items.forEach(function (b, i) {
-      var text = ((i + 1) + ' ' + b.querySelector('.hp-title').textContent).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-      b.parentNode.hidden = q && text.indexOf(q) === -1;
-    });
-  }
-
-  function onControl(e) {
-    var b = e.target.closest('[data-act]');
-    if (!b || !player) return;
-    var act = b.getAttribute('data-act');
-    if (act === 'prev') player.previousVideo();
-    if (act === 'next') { if (shuffle) jumpTo(randomOther()); else player.nextVideo(); }
+  box.addEventListener('click', function (e) {
+    var item = e.target.closest('.hp-item, .hp-cover-play');
+    if (item) { play(+item.getAttribute('data-i')); return; }
+    if (e.target.closest('.hp-cover-random')) { play(random()); return; }
+    var c = e.target.closest('[data-act]');
+    if (!c) return;
+    var act = c.getAttribute('data-act');
+    if (act === 'shuffle') { shuffle = !shuffle; c.setAttribute('aria-pressed', String(shuffle)); return; }
+    if (act === 'random') return play(random());
+    if (current < 0) return play(startAt);
+    if (act === 'prev') prev();
+    if (act === 'next') next();
     if (act === 'toggle') {
+      if (!ready) return;
       if (player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo(); else player.playVideo();
     }
-    if (act === 'shuffle') {
-      shuffle = !shuffle;
-      b.setAttribute('aria-pressed', String(shuffle));
-    }
-  }
+  });
 
-  box.querySelector('.hymn-start').addEventListener('click', start);
+  box.querySelector('.hp-search input').addEventListener('input', function (e) {
+    var q = fold(e.target.value.trim());
+    var shown = 0;
+    items.forEach(function (b, i) {
+      var h = H[i];
+      // A number on its own matches that hymn number (and numbers starting with it)
+      var hit = !q || (/^\d+$/.test(q) ? String(h[0]).indexOf(q) === 0 : index[i].indexOf(q) !== -1);
+      b.parentNode.hidden = !hit;
+      if (hit) shown++;
+    });
+    box.querySelector('.hp-empty').hidden = shown > 0;
+    list.scrollTop = 0;
+  });
 })();
