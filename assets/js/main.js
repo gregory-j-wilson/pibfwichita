@@ -81,6 +81,14 @@
         buildPager();
         showPage(0);
       });
+      // Open on a category from the link, e.g. galeria-de-fotos/#valentin
+      var fromHash = function () {
+        var id = decodeURIComponent(location.hash.slice(1));
+        var pill = id && filters.querySelector('[data-filter="' + id.replace(/"/g, '') + '"]');
+        if (pill) { pill.click(); filters.scrollIntoView({ block: 'start' }); }
+      };
+      fromHash();
+      window.addEventListener('hashchange', fromHash);
     }
 
     // Lightbox
