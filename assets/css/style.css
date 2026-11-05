@@ -163,6 +163,79 @@ font[style] { background: none !important; box-shadow: none !important; }
 .subfooter-row .right { color: #5996c1; }
 .subfooter-row .right a:first-child { text-decoration: none; font-weight: 700; }
 
+/* ---------- Música ---------- */
+.music .container { max-width: 1080px; }
+.music-intro { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; margin: 10px 0 56px; }
+.music-copy { font-size: 17px; line-height: 1.6; color: #333; }
+.music-copy p { margin: 0 0 14px; }
+.music-lead { font-family: var(--serif); font-style: italic; font-size: 23px; line-height: 1.35; color: var(--navy); }
+.music-photo { margin: 0; }
+.music-photo img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 8px 28px rgba(0, 0, 73, .18); }
+.music-photo figcaption { margin-top: 10px; text-align: center; font-family: var(--sans); font-weight: 600; color: var(--navy); }
+.hymns { background: var(--navy); color: #fff; border-radius: 14px; padding: 34px 32px 26px; }
+.hymns-head { max-width: 760px; margin: 0 auto 24px; text-align: center; }
+.hymns .hymns-kicker { margin: 0 0 4px; color: #f6c21c; font-family: var(--sans); font-weight: 700; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; }
+.hymns-head h2 { color: #fff; font-size: 32px; margin: 0 0 12px; }
+.hymns-head p { color: #dfe4ff; font-size: 17px; line-height: 1.55; margin: 0; }
+.hymns-head strong { color: #fff; }
+.hymns-note { margin: 14px 0 0; text-align: center; font-size: 13px; color: #b9c0ea; }
+.hymns-note a { color: #fff; }
+/* Before playing: a designed cover with a big play button */
+.hymn-start {
+  display: flex; align-items: center; justify-content: center; gap: 18px;
+  width: 100%; min-height: 220px; padding: 24px;
+  border: 2px solid rgba(246, 194, 28, .7); border-radius: 12px; cursor: pointer;
+  background: radial-gradient(ellipse at 30% 20%, #2b3ab8 0%, #0b1470 55%, #00002e 100%);
+  color: #fff; text-align: left; font-family: var(--sans);
+  transition: transform .2s, box-shadow .2s;
+}
+.hymn-start:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+.hymn-start:focus-visible { outline: 3px solid #f6c21c; outline-offset: 3px; }
+.hymn-start-icon { width: 78px; height: 78px; flex: none; border-radius: 50%; background: #f6c21c; color: var(--navy); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 8px rgba(246, 194, 28, .25); }
+.hymn-start-icon svg { width: 40px; height: 40px; margin-left: 4px; }
+.hymn-start-text { display: flex; flex-direction: column; gap: 4px; }
+.hymn-start-text strong { font-size: 24px; }
+.hymn-start-text span { color: #c9cff5; font-size: 15px; }
+/* After playing: player + list */
+.hymn-player.loaded { display: grid; grid-template-columns: 1.7fr 1fr; gap: 18px; align-items: start; }
+.hp-video { position: relative; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; }
+.hp-video iframe, .hp-video #hp-yt { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.hp-now { margin: 12px 0 8px; font-family: var(--sans); font-size: 17px; font-weight: 600; color: #fff; }
+.hp-now-label { color: #f6c21c; }
+.hp-controls { display: flex; align-items: center; gap: 8px; }
+.hp-btn { width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .12); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+.hp-btn:hover { background: rgba(255, 255, 255, .24); }
+.hp-btn svg { width: 22px; height: 22px; }
+.hp-btn.hp-play { width: 54px; height: 54px; background: #f6c21c; color: var(--navy); }
+.hp-btn.hp-play:hover { background: #ffd447; }
+.hp-btn.hp-shuffle[aria-pressed="true"] { background: #f6c21c; color: var(--navy); }
+.hp-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.hp-count { margin-left: auto; color: #b9c0ea; font-family: var(--sans); font-size: 14px; }
+.hp-side { background: rgba(255, 255, 255, .06); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; }
+.hp-search input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 0; font: 15px var(--sans); color: var(--navy); }
+.hp-list { list-style: none; margin: 10px 0 0; padding: 0; max-height: 440px; overflow-y: auto; }
+.hp-list li { margin: 0; }
+.hp-loading { padding: 16px; color: #b9c0ea; font-family: var(--sans); }
+.hp-item { display: grid; grid-template-columns: 30px 96px 1fr; gap: 10px; align-items: center; width: 100%; padding: 6px; border: 0; border-radius: 8px; background: transparent; color: #fff; text-align: left; cursor: pointer; font-family: var(--sans); }
+.hp-item:hover { background: rgba(255, 255, 255, .1); }
+.hp-item.current { background: rgba(246, 194, 28, .2); box-shadow: inset 3px 0 0 #f6c21c; }
+.hp-item img { width: 96px; height: 54px; object-fit: cover; border-radius: 5px; background: #222; }
+.hp-num { text-align: right; color: #b9c0ea; font-size: 14px; font-weight: 600; }
+.hp-item.current .hp-num { color: #f6c21c; }
+.hp-title { font-size: 15px; line-height: 1.3; }
+@media (max-width: 900px) {
+  .music-intro { grid-template-columns: 1fr; gap: 26px; }
+  .hymn-player.loaded { grid-template-columns: 1fr; }
+  .hp-list { max-height: 360px; }
+}
+@media (max-width: 767px) {
+  .hymns { padding: 26px 14px 20px; margin-inline: -4px; }
+  .hymns-head h2 { font-size: 26px; }
+  .music-lead { font-size: 20px; }
+  .hymn-start { flex-direction: column; text-align: center; min-height: 200px; }
+  .hymn-start-text strong { font-size: 20px; }
+}
+
 /* ---------- Donar ---------- */
 .give .container { max-width: 760px; }
 .give-verse { margin: 0 auto 32px; text-align: center; font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.35; color: var(--navy); }
