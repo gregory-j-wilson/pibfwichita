@@ -369,39 +369,6 @@
     return !isNaN(t) && Date.now() >= t;
   }
 
-  // ---------- Church address change (every page) ----------
-  // From midnight Nov 12 (Wichita time) every address marked data-address,
-  // the address Google reads on the home page, and the home page photo
-  // (img data-new-src) show the new building.
-  var MUDANZA = {
-    at: '2026-11-12T00:00:00-06:00',
-    text: '856 S Green St, Wichita, KS 67211',
-    street: '856 S Green St',
-    zip: '67211'
-  };
-  if (expired(MUDANZA.at)) {
-    document.querySelectorAll('[data-address]').forEach(function (el) { el.textContent = MUDANZA.text; });
-    // Swap the photo only once the new one has loaded (keeps the old photo
-    // if the new file isn't on the site).
-    document.querySelectorAll('img[data-new-src]').forEach(function (img) {
-      var pre = new Image();
-      pre.onload = function () {
-        img.src = pre.src;
-        img.alt = img.getAttribute('data-new-alt') || img.alt;
-      };
-      pre.src = img.getAttribute('data-new-src');
-    });
-    var ld = document.getElementById('church-ld');
-    if (ld) {
-      try {
-        var data = JSON.parse(ld.textContent);
-        data.address.streetAddress = MUDANZA.street;
-        data.address.postalCode = MUDANZA.zip;
-        ld.textContent = JSON.stringify(data);
-      } catch (e) {}
-    }
-  }
-
   // Novedades: the 3 newest events (by data-date, the event's last day)
   // show on top: upcoming ones soonest first, then past ones newest first.
   // Everything else goes under "Ver más", newest first. To add an event,
