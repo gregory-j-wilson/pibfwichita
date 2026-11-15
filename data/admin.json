@@ -1,0 +1,9 @@
+{
+ "version": 1,
+ "kdf": "PBKDF2-SHA256",
+ "iterations": 600000,
+ "salt": "se0Q5Sbg/i/2bocJW/NUcA==",
+ "iv": "85PiZPgWO4oMHqzo",
+ "token": "bl3JEg11g/mwpBGgQoc8Dy2G4/SMKQfHpKGpSZg3sxbcx5MBTIJE6JB3VIv2ujfkqv+peEN3t7PWItryGGElMcyAitqFAgSY6/r2eoKnfxzV1XxgZRlLDb4Q1Vssylu/vNj6haSLgmg/mD/law==",
+ "note": "Token de GitHub cifrado con la contraseña maestra del panel de administración. No contiene la contraseña."
+}
