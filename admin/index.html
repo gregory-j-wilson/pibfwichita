@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Administración - Primera Iglesia Bautista Fundamental</title>
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" href="../favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+  <header class="adm-top">
+    <a href="../" class="adm-brand"><img src="../assets/img/logo-white.png" width="500" height="342" alt=""><span>Administración</span></a>
+    <div class="adm-top-actions" hidden>
+      <a href="../calendario/" target="_blank" rel="noopener">Ver calendario</a>
+      <button type="button" class="adm-link" data-action="logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="adm-main" id="app">
+    <p class="adm-loading">Cargando…</p>
+  </main>
+
+  <div class="adm-toast" role="status" aria-live="polite" hidden></div>
+  <noscript><p class="adm-main">El panel de administración necesita JavaScript.</p></noscript>
+  <script src="../assets/js/admin.js"></script>
+</body>
+</html>

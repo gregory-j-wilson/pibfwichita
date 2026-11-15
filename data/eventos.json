@@ -1,0 +1,130 @@
+{
+ "eventos": [
+  {
+   "id": "escuela-dominical",
+   "titulo": "Escuela Dominical",
+   "categoria": "servicio",
+   "fecha": "2026-11-15",
+   "hora": "10:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "servicio-matutino",
+   "titulo": "Servicio Matutino",
+   "categoria": "servicio",
+   "fecha": "2026-11-15",
+   "hora": "11:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "servicio-vespertino",
+   "titulo": "Servicio Vespertino",
+   "categoria": "servicio",
+   "fecha": "2026-11-15",
+   "hora": "17:30",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "estudio-biblico",
+   "titulo": "Estudio Bíblico",
+   "categoria": "servicio",
+   "fecha": "2026-11-18",
+   "hora": "19:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "jueves-de-oracion",
+   "titulo": "Jueves de Oración",
+   "categoria": "servicio",
+   "fecha": "2026-11-19",
+   "hora": "19:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "evangelismo",
+   "titulo": "Evangelismo",
+   "categoria": "actividad",
+   "fecha": "2026-11-21",
+   "hora": "11:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "ropa-gratis-2026-11",
+   "titulo": "Ropa Gratis · Clothes Giveaway",
+   "categoria": "especial",
+   "fecha": "2026-11-06",
+   "fechaFin": "2026-11-07",
+   "hora": "11:00",
+   "horaFin": "15:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "descripcion": "¡Traiga su propia bolsa y tome lo que necesite! Ropa, zapatos y trastes.",
+   "notificar": true,
+   "imagenes": [
+    {
+     "src": "assets/img/ropa-gratis-2026-esp.jpg",
+     "idioma": "es",
+     "alt": "Cartel de Ropa Gratis"
+    },
+    {
+     "src": "assets/img/ropa-gratis-2026-eng.jpg",
+     "idioma": "en",
+     "alt": "Clothes Giveaway poster"
+    }
+   ]
+  },
+  {
+   "id": "ultimo-servicio-dodge-2026-11",
+   "titulo": "Último servicio en el edificio de Dodge",
+   "categoria": "especial",
+   "fecha": "2026-11-08",
+   "lugar": "1127 S Dodge Ave, Wichita, KS 67213",
+   "descripcion": "Nuestro último servicio en este edificio, con una comida de traje."
+  },
+  {
+   "id": "inauguracion-2026-11",
+   "titulo": "Inauguración de nuestro edificio",
+   "categoria": "especial",
+   "fecha": "2026-11-12",
+   "hora": "18:30",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "descripcion": "Dedicamos el templo a Dios. Habrá una cena ligera después del servicio.",
+   "notificar": true,
+   "imagenes": [
+    {
+     "src": "assets/img/inauguracion-2026.jpg",
+     "idioma": "es",
+     "alt": "Cartel de la Inauguración de nuestro edificio"
+    }
+   ]
+  },
+  {
+   "id": "conferencia-fundamentos-2026-11",
+   "titulo": "Conferencia de Fundamentos",
+   "categoria": "conferencia",
+   "fecha": "2026-11-13",
+   "fechaFin": "2026-11-14",
+   "hora": "18:30",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "descripcion": "Viernes 13 a las 6:30 p.m. (cena ligera al terminar) y sábado 14 a las 10:00 a.m. (almuerzo al final). Predicadores invitados.",
+   "notificar": true,
+   "imagenes": [
+    {
+     "src": "assets/img/conferencia-fundamentos-2026-esp.jpg",
+     "idioma": "es",
+     "alt": "Cartel de la Conferencia de Fundamentos"
+    },
+    {
+     "src": "assets/img/conferencia-fundamentos-2026-eng.jpg",
+     "idioma": "en",
+     "alt": "Fundamental Conference poster"
+    }
+   ]
+  }
+ ]
+}

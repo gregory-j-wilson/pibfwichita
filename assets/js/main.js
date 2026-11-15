@@ -2,6 +2,46 @@
 (function () {
   'use strict';
 
+  // ---------- Shared: site data (data/*.json) and Spanish date formatting ----------
+  var SCRIPT = document.currentScript || document.querySelector('script[src*="main.js"]');
+  var SITE = new URL('../../', SCRIPT.src); // site root
+  var PIBF = window.PIBF = window.PIBF || {};
+  PIBF.site = SITE.href;
+  PIBF.loadData = function (name) {
+    return fetch(new URL('data/' + name, SITE).href, { cache: 'no-cache' }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    });
+  };
+  var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  var DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+  PIBF.MESES = MESES; PIBF.DIAS = DIAS;
+  PIBF.parseDate = function (s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); };
+  PIBF.fmtTime = function (t) {
+    if (!t) return '';
+    var p = t.split(':'), h = +p[0], m = p[1] || '00';
+    return (h % 12 || 12) + ':' + m + (h < 12 ? ' a.m.' : ' p.m.');
+  };
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  PIBF.fmtDay = function (d) { return cap(DIAS[d.getDay()]) + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()]; };
+  PIBF.fmtWhen = function (ev) {
+    var a = PIBF.parseDate(ev.fecha), s;
+    if (ev.repetir === 'semanal') s = 'Cada ' + DIAS[a.getDay()];
+    else if (ev.fechaFin && ev.fechaFin !== ev.fecha) {
+      var b = PIBF.parseDate(ev.fechaFin);
+      var days = Math.round((b - a) / 864e5);
+      if (a.getMonth() === b.getMonth() && days === 1) s = cap(DIAS[a.getDay()]) + ' ' + a.getDate() + ' y ' + DIAS[b.getDay()] + ' ' + b.getDate() + ' de ' + MESES[b.getMonth()];
+      else if (a.getMonth() === b.getMonth()) s = 'Del ' + a.getDate() + ' al ' + b.getDate() + ' de ' + MESES[b.getMonth()];
+      else s = 'Del ' + a.getDate() + ' de ' + MESES[a.getMonth()] + ' al ' + b.getDate() + ' de ' + MESES[b.getMonth()];
+    } else s = PIBF.fmtDay(a);
+    if (ev.hora) s += ' · ' + PIBF.fmtTime(ev.hora) + (ev.horaFin ? ' – ' + PIBF.fmtTime(ev.horaFin) : '');
+    return s;
+  };
+  // Last moment of the event (end of its last day, visitor's time)
+  PIBF.eventEnd = function (ev) { return (ev.fechaFin || ev.fecha) + 'T23:59:59'; };
+  PIBF.imageUrl = function (src) { return new URL(src, SITE).href; };
+  PIBF.esc = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
   // ---------- Mobile menu ----------
   var nav = document.querySelector('.main-nav');
   var toggle = document.querySelector('.nav-toggle');
@@ -152,31 +192,32 @@
     });
   }
 
-  // ---------- Bulletins ----------
+  // ---------- Bulletins (data/boletines.json, newest first) ----------
   var bulletinCard = document.getElementById('bulletin-latest');
-  if (bulletinCard && window.BOLETINES && window.BOLETINES.length) {
-    var list = window.BOLETINES;
-    var base = document.body.getAttribute('data-base') || '';
-    var latest = list[0];
-    bulletinCard.href = base + latest.archivo;
-    bulletinCard.querySelector('.date').textContent = latest.fecha;
-    bulletinCard.querySelector('.day').textContent = latest.dia || 'Domingo';
-
-    var archive = document.getElementById('bulletin-archive');
-    if (archive && list.length > 1) {
-      var ul = archive.querySelector('ul');
-      list.slice(1).forEach(function (b) {
-        var li = document.createElement('li');
-        var a = document.createElement('a');
-        a.href = base + b.archivo;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.textContent = b.fecha;
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
-      archive.hidden = false;
-    }
+  if (bulletinCard) {
+    PIBF.loadData('boletines.json').then(function (list) {
+      if (!list || !list.length) return;
+      var latest = list[0];
+      bulletinCard.href = PIBF.imageUrl(latest.archivo);
+      bulletinCard.querySelector('.date').textContent = latest.fecha;
+      bulletinCard.querySelector('.day').textContent = latest.dia || 'Domingo';
+      var archive = document.getElementById('bulletin-archive');
+      if (archive && list.length > 1) {
+        var ul = archive.querySelector('ul');
+        ul.innerHTML = '';
+        list.slice(1).forEach(function (b) {
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          a.href = PIBF.imageUrl(b.archivo);
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.textContent = b.fecha;
+          li.appendChild(a);
+          ul.appendChild(li);
+        });
+        archive.hidden = false;
+      }
+    }).catch(function () {});
   }
 
   // ---------- Versículo del Día + nature photo (home page) ----------
@@ -305,6 +346,7 @@
     show(start);
   }
   document.querySelectorAll('.poster-pair').forEach(posterToggle);
+  PIBF.posterToggle = posterToggle;
 
   // ---------- Notifications bell (every page) ----------
   // Each notification shows in the bell's drop-down until its `until` time
@@ -313,56 +355,18 @@
   // place and description. The bell shimmers and shows a red dot until the
   // visitor has opened every current notification. To add one, copy a block
   // and give it a new, unique `id`.
-  var AVISOS = [
-    {
-      id: 'ropa-gratis-2026-11',
-      until: '2026-11-08T00:00:00-06:00',
-      title: 'Ropa Gratis · Clothes Giveaway',
-      when: 'Viernes 6 y sábado 7 de noviembre · 11 AM – 3 PM',
-      place: '856 S. Green St., Wichita, KS 67211',
-      images: [
-        { src: 'img/ropa-gratis-2026-esp.jpg', alt: 'Cartel de Ropa Gratis: viernes 6 y sábado 7 de noviembre de 2026, 11 AM a 3 PM, 856 S Green St., Wichita, KS 67211. Ropa, zapatos y trastes. ¡Traiga su propia bolsa y tome lo que necesite!' },
-        { src: 'img/ropa-gratis-2026-eng.jpg', alt: 'Clothes Giveaway poster: Friday November 6 and Saturday November 7, 2026, 11 AM to 3 PM, 856 S Green St., Wichita, KS 67211. Clothes, shoes and dishes. Bring your own bag and take what you need.' }
-      ]
-    },
-    {
-      id: 'dias-de-trabajo-2026-11',
-      until: '2026-11-08T00:00:00-06:00',
-      title: 'Días de trabajo en el edificio nuevo',
-      when: 'Viernes 6 y sábado 7 de noviembre',
-      place: 'Edificio nuevo · 856 S. Green St., Wichita, KS 67211',
-      description: 'Se necesita la ayuda de todos para tener el edificio listo para la inauguración. También estaremos donando a la comunidad la ropa que está en los salones, así que habrá oportunidad de evangelizar.'
-    },
-    {
-      id: 'ultimo-servicio-dodge-2026-11',
-      until: '2026-11-09T00:00:00-06:00',
-      title: 'Último servicio en este edificio',
-      when: 'Domingo 8 de noviembre',
-      place: '1127 S. Dodge Ave., Wichita, KS 67213',
-      description: 'Será nuestro último servicio en este edificio y queremos tener algo especial. Tendremos nuestra última comida de traje aquí. Anótese con la hna. Andrea para la comida y no falte a este servicio especial.'
-    },
-    {
-      id: 'inauguracion-2026-11',
-      until: '2026-11-13T00:00:00-06:00',
-      title: 'Inauguración de nuestro edificio',
-      when: 'Jueves 12 de noviembre · 6:30 p.m.',
-      place: '856 S. Green St., Wichita, KS 67211',
-      images: [
-        { src: 'img/inauguracion-2026.jpg', alt: 'Cartel de la Inauguración de nuestro edificio: jueves 12 de noviembre, 6:30 p.m., 856 S. Green St., Wichita, KS 67211. Habrá una ligera cena después del servicio. Si necesita transportación, favor de llamar al 316-794-6217. 1 Samuel 7:12: “Hasta aquí nos ayudó Jehová.”' }
-      ]
-    },
-    {
-      id: 'conferencia-fundamentos-2026-11',
-      until: '2026-11-15T00:00:00-06:00',
-      title: 'Conferencia de Fundamentos',
-      when: 'Viernes 13 (6:30 p.m.) y sábado 14 de noviembre (10:00 a.m.)',
-      place: '856 S. Green St., Wichita, KS',
-      images: [
-        { src: 'img/conferencia-fundamentos-2026-esp.jpg', alt: 'Cartel de la Conferencia de Fundamentos, 2 Timoteo 2:19: viernes 13 de noviembre a las 6:30 PM con cena ligera al terminar, y sábado 14 de noviembre a las 10:00 AM con almuerzo al final. 856 S. Green St., Wichita, KS.' },
-        { src: 'img/conferencia-fundamentos-2026-eng.jpg', alt: 'Fundamental Conference poster, 2 Timothy 2:19: Friday November 13 at 6:30 PM with dinner afterward, and Saturday November 14 at 10:00 AM with lunch at the end. 856 S. Green St., Wichita, KS.' }
-      ]
-    }
-  ];
+  // Notifications are calendar events marked "notificar" in data/eventos.json
+  // (managed from the admin page). Each shows until the end of its last day.
+  function toAvisos(eventos) {
+    return (eventos || []).filter(function (ev) { return ev.notificar && ev.repetir !== 'semanal'; }).map(function (ev) {
+      var imgs = (ev.imagenes || []).slice().sort(function (x, y) { return (x.idioma === 'en') - (y.idioma === 'en'); });
+      return {
+        id: ev.id, until: PIBF.eventEnd(ev), title: ev.titulo, when: PIBF.fmtWhen(ev),
+        place: ev.lugar, description: ev.descripcion,
+        images: imgs.map(function (im) { return { src: PIBF.imageUrl(im.src), alt: im.alt || ev.titulo }; })
+      };
+    });
+  }
 
   function expired(when) {
     var t = Date.parse(when);
@@ -388,9 +392,8 @@
     items.slice(3).forEach(function (el) { more.appendChild(el); });
   })();
 
-  (function () {
-    var script = document.currentScript || document.querySelector('script[src*="main.js"]');
-    var assets = new URL('../', script.src); // .../assets/
+  function buildBell(AVISOS) {
+    var assets = new URL('assets/', SITE);
     var KEY = 'pibf-avisos-leidos';
     var read = [];
     try { read = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) {}
@@ -506,7 +509,8 @@
       if (e.key === 'Escape' && !panel.hidden) { setOpen(false); bell.focus(); }
     });
     updateBell();
-  })();
+  }
+  PIBF.loadData('eventos.json').then(function (d) { buildBell(toAvisos(d.eventos)); }, function () { buildBell([]); });
 
   // ---------- Back to top button (every page) ----------
   (function () {

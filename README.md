@@ -10,26 +10,37 @@ sobre-nosotros/             Sobre Nosotros
 nuestras-creencias/         Nuestras Creencias
 galeria-de-fotos/           Galería de Fotos
 boletines-semanales/        Boletines Semanales
+calendario/                 Calendario (events from data/eventos.json)
+musica/                     Música (hymn player; list in assets/js/himnos.js)
+donar/                      Donar (Zelle)
+admin/                      Admin panel (not linked, not indexed)
+data/eventos.json           Calendar events (also feed the notification bell)
+data/boletines.json         Bulletin list, newest first
+data/admin.json             Admin panel's GitHub token, encrypted with the master password
 contacto/                   Contacto (+ contacto/gracias/ thank-you page)
 vbs-2022/                   VBS 2022 photo gallery
 politica-de-privacidad/     Política de Privacidad
 boletines/                  Weekly bulletin PDFs, named YYYY-MM-DD.pdf
 assets/css/style.css        All styles
-assets/js/main.js           Mobile menu, gallery pages and lightbox, bulletin list
-assets/js/boletines.js      The bulletin list (edit this weekly)
+assets/js/main.js           Shared site script (menu, gallery, bulletins, bell, translation…)
+assets/js/calendario.js     Calendar page
+assets/js/admin.js          Admin panel
 assets/img/                 Images (galeria/ and vbs-2022/ hold the photo galleries)
 chat/ noticias/ blog/ pibf-home/   Redirects from old WordPress URLs
 CNAME                       Custom domain for GitHub Pages
 ```
 
-## Weekly bulletin
+## Admin panel (`/admin/`)
 
-1. Upload the PDF to `boletines/`, named by Sunday's date, e.g. `2026-11-08.pdf`.
-2. In `assets/js/boletines.js`, add a new line at the **top** of the list:
-   ```js
-   { fecha: "8 de Noviembre, 2026", dia: "Domingo", archivo: "boletines/2026-11-08.pdf" },
-   ```
-The first entry is shown as the current bulletin. The rest appear under "Boletines anteriores."
+The easiest way to keep the site up to date. Open `https://pibfwichita.com/admin/` and enter the master password.
+
+- **Calendario** – add, edit and delete events: date(s), time, place, description, category, weekly repeats, posters (Spanish first), and whether the event shows in the notification bell until it ends.
+- **Boletines** – upload the weekly bulletin PDF; it becomes the current bulletin.
+- **Ajustes** – replace the GitHub token (it shows when it expires) or change the master password.
+
+How it works: the site is static, so the panel saves by committing to this repository through the GitHub API, which redeploys the site (1–2 minutes). It uses a fine-grained GitHub token limited to this repository with **Contents: Read and write**. The token is stored only encrypted, in `data/admin.json`, with the master password (PBKDF2-SHA256, 600,000 rounds + AES-GCM, in the browser). The password itself is not stored anywhere. If it's forgotten, delete `data/admin.json` and open `/admin/` to set it up again with a new token.
+
+Data files can also be edited by hand: `data/eventos.json` (events) and `data/boletines.json` (bulletins: `fecha`, `dia`, `archivo`, newest first).
 
 ## Adding gallery photos
 
