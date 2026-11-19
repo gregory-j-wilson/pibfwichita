@@ -163,6 +163,52 @@ font[style] { background: none !important; box-shadow: none !important; }
 .subfooter-row .right { color: #5996c1; }
 .subfooter-row .right a:first-child { text-decoration: none; font-weight: 700; }
 
+/* ---------- Leer la Biblia ---------- */
+#biblia { max-width: 980px; font-family: var(--sans); }
+.bib-intro { text-align: center; color: #444; font-size: 17px; margin: -4px auto 28px; max-width: 680px; }
+.bib-week { background: #fff; border: 1px solid rgba(0,0,73,.12); border-radius: 14px; padding: 22px 24px; margin-bottom: 30px; box-shadow: 0 4px 16px rgba(0,0,73,.06); }
+.bib-today { background: var(--navy); color: #fff; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; }
+.bib-kicker { margin: 0 0 10px; color: #f6c21c; font-weight: 700; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; }
+.bib-week-head h2 { margin: 0; font-size: 22px; color: var(--navy); }
+.bib-week-head p { margin: 2px 0 12px; color: #555; font-size: 15px; }
+.bib-days { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.bib-days li { display: grid; grid-template-columns: 170px 1fr; gap: 12px; align-items: center; padding: 8px 10px; border-radius: 10px; }
+.bib-days li.today { background: rgba(246, 194, 28, .16); box-shadow: inset 3px 0 0 #f6c21c; }
+.bib-days li.past { opacity: .65; }
+.bib-day { color: #444; font-size: 15px; }
+.bib-day strong { color: var(--navy); }
+.bib-day em { font-style: normal; font-size: 12px; font-weight: 700; background: #f6c21c; color: var(--navy); padding: 1px 8px; border-radius: 999px; margin-left: 4px; }
+.bib-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.bib-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--sky); color: var(--navy); font-weight: 600; font-size: 14px; text-decoration: none; border: 1px solid rgba(0,0,73,.1); }
+.bib-chip:hover { background: #d3e6f8; }
+.bib-chip svg { width: 13px; height: 13px; opacity: .7; }
+.bib-chips.big .bib-chip { background: #fff; font-size: 16px; padding: 9px 16px; }
+.bib-chips.big .bib-chip:hover { background: #f6c21c; }
+.bib-picker-wrap { background: #fff; border: 1px solid rgba(0,0,73,.12); border-radius: 14px; padding: 22px 24px; box-shadow: 0 4px 16px rgba(0,0,73,.06); }
+.bib-picker-wrap h2 { margin: 0 0 14px; font-size: 22px; color: var(--navy); }
+.bib-search { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.bib-search input { flex: 1; min-width: 220px; padding: 11px 14px; border: 1px solid #c8cbe0; border-radius: 10px; font: 16px var(--sans); }
+.bib-search button { padding: 11px 22px; border: 0; border-radius: 10px; background: var(--navy); color: #fff; font: 700 16px var(--sans); cursor: pointer; }
+.bib-search button:hover { background: var(--blue); }
+.bib-msg { flex-basis: 100%; margin: 0; color: var(--red); font-size: 14px; }
+.bib-book { display: grid; gap: 6px; font-weight: 700; color: var(--navy); max-width: 360px; }
+.bib-book select { padding: 10px 12px; border: 1px solid #c8cbe0; border-radius: 10px; font: 16px var(--sans); background: #fff; }
+.bib-caps-label, .bib-vers-label { margin: 16px 0 6px; font-weight: 700; color: var(--navy); font-size: 15px; }
+.bib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; padding: 2px; }
+.bib-grid button { height: 40px; border: 1px solid rgba(0,0,73,.15); border-radius: 8px; background: #fff; color: var(--navy); font: 600 15px var(--sans); cursor: pointer; }
+.bib-grid button:hover { background: var(--sky); }
+.bib-grid button[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.bib-go { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding: 13px 24px; border-radius: 10px; background: #f6c21c; color: var(--navy); font: 700 17px var(--sans); text-decoration: none; }
+.bib-go:hover { background: #ffd447; }
+.bib-go svg { width: 18px; height: 18px; }
+.bib-note { margin: 16px 0 0; font-size: 13px; color: #666; }
+.bib-none { color: #666; margin: 0; }
+@media (max-width: 767px) {
+  .bib-week, .bib-picker-wrap { padding: 18px 14px; }
+  .bib-days li { grid-template-columns: 1fr; gap: 6px; }
+  .bib-go { width: 100%; justify-content: center; }
+}
+
 /* ---------- Calendario ---------- */
 .cal { --c-servicio: #0813ad; --c-especial: #d39b00; --c-conferencia: #bc1818; --c-actividad: #1b7a3d; --c-otro: #666; font-family: var(--sans); }
 .cat-servicio { --c: var(--c-servicio); } .cat-especial { --c: var(--c-especial); } .cat-conferencia { --c: var(--c-conferencia); } .cat-actividad { --c: var(--c-actividad); } .cat-otro { --c: var(--c-otro); }

@@ -20,7 +20,7 @@
   var app = document.getElementById('app');
   var toastEl = document.querySelector('.adm-toast');
   var session = { token: null, password: null, config: null, tokenExpires: null };
-  var state = { eventos: [], boletines: [], tab: 'calendario', editing: null };
+  var state = { eventos: [], boletines: [], lectura: null, tab: 'calendario', editing: null };
 
   // ---------- small helpers ----------
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -205,9 +205,10 @@
   function startDashboard() {
     $('.adm-top-actions').hidden = false;
     app.innerHTML = '<p class="adm-loading">Cargando datos…</p>';
-    Promise.all([readJSON('data/eventos.json'), readJSON('data/boletines.json')]).then(function (r) {
+    Promise.all([readJSON('data/eventos.json'), readJSON('data/boletines.json'), readJSON('data/lectura.json')]).then(function (r) {
       state.eventos = (r[0] && r[0].eventos) || [];
       state.boletines = r[1] || [];
+      state.lectura = r[2] || { desde: '', dias: [] };
       render();
     }).catch(function (e) {
       app.innerHTML = '<section class="adm-card"><p>' + esc(errText(e).replace('No se pudo guardar', 'No se pudieron cargar los datos')) + '</p><button class="adm-btn" data-action="retry">Intentar de nuevo</button></section>';
@@ -215,13 +216,14 @@
   }
 
   function render() {
-    var tabs = [['calendario', 'Calendario'], ['boletines', 'Boletines'], ['ajustes', 'Ajustes']];
+    var tabs = [['calendario', 'Calendario'], ['boletines', 'Boletines'], ['lectura', 'Lectura bíblica'], ['ajustes', 'Ajustes']];
     app.innerHTML = '<nav class="adm-tabs" role="tablist">' + tabs.map(function (t) {
       return '<button type="button" role="tab" data-tab="' + t[0] + '" aria-selected="' + (state.tab === t[0]) + '">' + t[1] + '</button>';
     }).join('') + '</nav><div class="adm-panel"></div>';
     var panel = $('.adm-panel');
     if (state.tab === 'calendario') (state.editing ? renderEventForm : renderEvents)(panel);
     if (state.tab === 'boletines') renderBoletines(panel);
+    if (state.tab === 'lectura') renderLectura(panel);
     if (state.tab === 'ajustes') renderAjustes(panel);
   }
 
@@ -413,6 +415,51 @@
     });
   }
 
+  // ---------- Lectura bíblica (weekly plan from the bulletin) ----------
+  function nextMonday() { var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); return d; }
+  function renderLectura(panel) {
+    var L = state.lectura || { dias: [] };
+    var DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    var B = window.BIBLIA;
+    panel.innerHTML = '<div class="adm-bar"><h2>Lectura bíblica de la semana</h2><a class="adm-btn ghost" href="../biblia/" target="_blank" rel="noopener">Ver la página</a></div>' +
+      '<form id="lecform" class="adm-card adm-form">' +
+      '<p class="adm-hint">Copie la lectura de cada día tal como aparece en el boletín (por ejemplo: <em>1 Juan: capítulo 4, capítulo 5</em> o <em>2 Juan, 3 Juan, y Judas</em>). Debajo de cada día verá cómo se entendió.</p>' +
+      '<div class="adm-row"><label>Semana que empieza el lunes<input type="date" name="desde" required value="' + esc(L.desde || iso(nextMonday())) + '"></label>' +
+      '<label>Boletín de esa semana <small>(opcional)</small><select name="boletin"><option value="">—</option>' +
+      state.boletines.slice(0, 8).map(function (b) { return '<option value="' + esc(b.archivo) + '"' + (L.boletin === b.archivo ? ' selected' : '') + '>' + esc(b.fecha) + '</option>'; }).join('') +
+      '</select></label></div>' +
+      DAYS.map(function (d, i) {
+        return '<label>' + d + '<input name="dia' + i + '" value="' + esc((L.dias || [])[i] || '') + '" autocomplete="off"><span class="adm-parse" data-for="dia' + i + '"></span></label>';
+      }).join('') +
+      '<div class="adm-actions"><button class="adm-btn" type="submit">Guardar lectura</button></div></form>';
+    var form = $('#lecform');
+    function preview(input) {
+      var out = form.querySelector('[data-for="' + input.name + '"]');
+      if (!input.value.trim()) { out.textContent = ''; out.className = 'adm-parse'; return true; }
+      var r = B ? B.parse(input.value) : [];
+      var ok = r.length && !(r.bad && r.bad.length);
+      out.className = 'adm-parse ' + (ok ? 'ok' : 'warn');
+      out.textContent = (r.length ? '→ ' + r.map(B.label).join(' · ') : '') + (r.bad && r.bad.length ? (r.length ? '  ·  ' : '') + 'No se entendió: ' + r.bad.join(', ') : '');
+      return ok;
+    }
+    form.querySelectorAll('input[name^="dia"]').forEach(function (inp) { preview(inp); inp.addEventListener('input', function () { preview(inp); }); });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = form.querySelector('[type=submit]');
+      var dias = DAYS.map(function (d, i) { return form['dia' + i].value.trim(); });
+      var unclear = DAYS.filter(function (d, i) { return dias[i] && !preview(form['dia' + i]); });
+      if (unclear.length && !confirm('No se entendió la lectura de: ' + unclear.join(', ') + '. Se mostrará como texto, sin enlace. ¿Guardar de todos modos?')) return;
+      var data = { desde: form.desde.value, dias: dias };
+      if (form.boletin.value) data.boletin = form.boletin.value;
+      busy(btn, true);
+      commit([{ path: 'data/lectura.json', text: JSON.stringify(data, null, 1) + '\n' }], 'Lectura bíblica de la semana del ' + data.desde).then(function () {
+        state.lectura = data;
+        busy(btn, false);
+        toast('✓ Lectura guardada. El sitio se actualizará en 1–2 minutos.', 'ok');
+      }).catch(function (err) { busy(btn, false); toast(errText(err), 'error'); });
+    });
+  }
+
   // ---------- Ajustes ----------
   function renderAjustes(panel) {
     var exp = session.tokenExpires ? new Date(session.tokenExpires.replace(' UTC', 'Z').replace(' ', 'T')) : null;
@@ -478,7 +525,7 @@
     if (a === 'new-event') { state.editing = 'new'; render(); }
     if (a === 'cancel-edit') { state.editing = null; render(); }
     if (a === 'retry') startDashboard();
-    if (a === 'logout') { session = { token: null, password: null, config: null }; state = { eventos: [], boletines: [], tab: 'calendario', editing: null }; boot(); }
+    if (a === 'logout') { session = { token: null, password: null, config: null }; state = { eventos: [], boletines: [], lectura: null, tab: 'calendario', editing: null }; boot(); }
   });
 
   function boot() {

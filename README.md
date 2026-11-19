@@ -11,11 +11,13 @@ nuestras-creencias/         Nuestras Creencias
 galeria-de-fotos/           Galería de Fotos
 boletines-semanales/        Boletines Semanales
 calendario/                 Calendario (events from data/eventos.json)
+biblia/                     Leer la Biblia (weekly reading + passage picker; opens RVR1960 on YouVersion)
 musica/                     Música (hymn player; list in assets/js/himnos.js)
 donar/                      Donar (Zelle)
 admin/                      Admin panel (not linked, not indexed)
 data/eventos.json           Calendar events (also feed the notification bell)
 data/boletines.json         Bulletin list, newest first
+data/lectura.json           This week's Bible reading plan (Monday date + 7 days, as written in the bulletin)
 data/admin.json             Admin panel's GitHub token, encrypted with the master password
 contacto/                   Contacto (+ contacto/gracias/ thank-you page)
 vbs-2022/                   VBS 2022 photo gallery
@@ -36,6 +38,7 @@ The easiest way to keep the site up to date. Open `https://pibfwichita.com/admin
 
 - **Calendario** – add, edit and delete events: date(s), time, place, description, category, weekly repeats, posters (Spanish first), and whether the event shows in the notification bell until it ends.
 - **Boletines** – upload the weekly bulletin PDF; it becomes the current bulletin.
+- **Lectura bíblica** – paste each day's reading from the bulletin; a live preview shows how each one was understood.
 - **Ajustes** – replace the GitHub token (it shows when it expires) or change the master password.
 
 How it works: the site is static, so the panel saves by committing to this repository through the GitHub API, which redeploys the site (1–2 minutes). It uses a fine-grained GitHub token limited to this repository with **Contents: Read and write**. The token is stored only encrypted, in `data/admin.json`, with the master password (PBKDF2-SHA256, 600,000 rounds + AES-GCM, in the browser). The password itself is not stored anywhere. If it's forgotten, delete `data/admin.json` and open `/admin/` to set it up again with a new token.

@@ -73,6 +73,9 @@ details.adm-card[open] summary { margin-bottom: 12px; }
 .adm-tags em, .adm-li-main em { font-style: normal; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; background: #eef0f7; color: #444; }
 em.t-bell { background: #fff4cc; color: #7a5a00; }
 .adm-empty { color: #777; margin: 0; }
+.adm-parse { font-weight: 400; font-size: 13px; min-height: 1em; }
+.adm-parse.ok { color: #1b6b34; }
+.adm-parse.warn { color: var(--red); }
 
 .adm-toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); max-width: min(560px, calc(100% - 24px)); padding: 12px 18px; border-radius: 10px; background: var(--navy); color: #fff; font-weight: 600; box-shadow: 0 8px 24px rgba(0, 0, 0, .25); z-index: 10; }
 .adm-toast.ok { background: #1b6b34; }
