@@ -1,60 +1,6 @@
 {
  "eventos": [
   {
-   "id": "escuela-dominical",
-   "titulo": "Escuela Dominical",
-   "categoria": "servicio",
-   "fecha": "2026-11-15",
-   "hora": "10:00",
-   "lugar": "856 S Green St, Wichita, KS 67211",
-   "repetir": "semanal"
-  },
-  {
-   "id": "servicio-matutino",
-   "titulo": "Servicio Matutino",
-   "categoria": "servicio",
-   "fecha": "2026-11-15",
-   "hora": "11:15",
-   "lugar": "856 S Green St, Wichita, KS 67211",
-   "repetir": "semanal"
-  },
-  {
-   "id": "servicio-vespertino",
-   "titulo": "Servicio Vespertino",
-   "categoria": "servicio",
-   "fecha": "2026-11-15",
-   "hora": "17:30",
-   "lugar": "856 S Green St, Wichita, KS 67211",
-   "repetir": "semanal"
-  },
-  {
-   "id": "estudio-biblico",
-   "titulo": "Estudio Bíblico",
-   "categoria": "servicio",
-   "fecha": "2026-11-18",
-   "hora": "19:00",
-   "lugar": "856 S Green St, Wichita, KS 67211",
-   "repetir": "semanal"
-  },
-  {
-   "id": "jueves-de-oracion",
-   "titulo": "Jueves de Oración",
-   "categoria": "servicio",
-   "fecha": "2026-11-19",
-   "hora": "19:00",
-   "lugar": "856 S Green St, Wichita, KS 67211",
-   "repetir": "semanal"
-  },
-  {
-   "id": "evangelismo",
-   "titulo": "Evangelismo",
-   "categoria": "actividad",
-   "fecha": "2026-11-21",
-   "hora": "11:00",
-   "lugar": "856 S Green St, Wichita, KS 67211",
-   "repetir": "semanal"
-  },
-  {
    "id": "ropa-gratis-2026-11",
    "titulo": "Ropa Gratis · Clothes Giveaway",
    "categoria": "especial",
@@ -125,6 +71,89 @@
      "alt": "Fundamental Conference poster"
     }
    ]
+  },
+  {
+   "id": "escuela-dominical",
+   "titulo": "Escuela Dominical",
+   "categoria": "servicio",
+   "fecha": "2026-11-15",
+   "hora": "10:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "servicio-matutino",
+   "titulo": "Servicio Matutino",
+   "categoria": "servicio",
+   "fecha": "2026-11-15",
+   "hora": "11:15",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "servicio-vespertino",
+   "titulo": "Servicio Vespertino",
+   "categoria": "servicio",
+   "fecha": "2026-11-15",
+   "hora": "17:30",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "estudio-biblico",
+   "titulo": "Estudio Bíblico",
+   "categoria": "servicio",
+   "fecha": "2026-11-18",
+   "hora": "19:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "jueves-de-oracion",
+   "titulo": "Jueves de Oración",
+   "categoria": "servicio",
+   "fecha": "2026-11-19",
+   "hora": "19:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "evangelismo",
+   "titulo": "Evangelismo",
+   "categoria": "actividad",
+   "fecha": "2026-11-21",
+   "hora": "11:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "repetir": "semanal"
+  },
+  {
+   "id": "accion-de-gracias-2026-11-29",
+   "titulo": "Servicio de Acción de Gracias",
+   "categoria": "especial",
+   "fecha": "2026-11-29",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "descripcion": "Nuestro servicio anual de Acción de Gracias: un tiempo de agradecimiento a Dios y un rico almuerzo de traje después del servicio. Traiga a sus familiares y amistades a agradecer a Dios por Sus bondades.",
+   "notificar": true
+  },
+  {
+   "id": "banquete-de-damas-2026-12-05",
+   "titulo": "Banquete de Damas",
+   "categoria": "especial",
+   "fecha": "2026-12-05",
+   "hora": "18:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "descripcion": "Nuestro banquete anual de damas, con enseñanza bíblica, juegos y cena. El costo es de $20 por persona para la comida; favor de anotarse con la hna. Mary. Si desea participar en el juego, traiga un regalo de $10.",
+   "notificar": true
+  },
+  {
+   "id": "banquete-de-varones-2026-12-12",
+   "titulo": "Banquete de Varones",
+   "categoria": "especial",
+   "fecha": "2026-12-12",
+   "hora": "18:00",
+   "lugar": "856 S Green St, Wichita, KS 67211",
+   "descripcion": "Se invita a todos los varones de la iglesia a su banquete anual: un tiempo especial de enseñanza bíblica y buen compañerismo. El costo es de $20 por persona para cubrir la comida.",
+   "notificar": true
   }
  ]
 }
