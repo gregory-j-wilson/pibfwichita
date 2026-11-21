@@ -17,7 +17,7 @@ donar/                      Donar (Zelle)
 admin/                      Admin panel (not linked, not indexed)
 data/eventos.json           Calendar events (also feed the notification bell)
 data/boletines.json         Bulletin list, newest first
-data/lectura.json           This week's Bible reading plan (Monday date + 7 days, as written in the bulletin)
+data/lectura.json           Bible reading plan: last few weeks ({semanas: [{desde, boletin, dias[7]}]}); the page shows the week containing today
 data/admin.json             Admin panel's GitHub token, encrypted with the master password
 contacto/                   Contacto (+ contacto/gracias/ thank-you page)
 vbs-2022/                   VBS 2022 photo gallery

@@ -1,13 +1,30 @@
 {
- "desde": "2026-11-16",
- "boletin": "boletines/2026-11-15.pdf",
- "dias": [
-  "2 Pedro: capítulo 1, capítulo 2 y capítulo 3",
-  "1 Juan: capítulo 1, capítulo 2 y capítulo 3",
-  "1 Juan: capítulo 4, capítulo 5",
-  "2 Juan, 3 Juan, y Judas",
-  "Apocalipsis: capítulo 1, capítulo 2 y capítulo 3",
-  "Apocalipsis: capítulo 4, capítulo 5 y capítulo 6",
-  "Apocalipsis: capítulo 7, capítulo 8 y capítulo 9"
+ "semanas": [
+  {
+   "desde": "2026-11-16",
+   "boletin": "boletines/2026-11-15.pdf",
+   "dias": [
+    "2 Pedro: capítulo 1, capítulo 2 y capítulo 3",
+    "1 Juan: capítulo 1, capítulo 2 y capítulo 3",
+    "1 Juan: capítulo 4, capítulo 5",
+    "2 Juan, 3 Juan, y Judas",
+    "Apocalipsis: capítulo 1, capítulo 2 y capítulo 3",
+    "Apocalipsis: capítulo 4, capítulo 5 y capítulo 6",
+    "Apocalipsis: capítulo 7, capítulo 8 y capítulo 9"
+   ]
+  },
+  {
+   "desde": "2026-11-23",
+   "boletin": "boletines/2026-11-22.pdf",
+   "dias": [
+    "Apocalipsis: capítulo 10, capítulo 11 y capítulo 12",
+    "Apocalipsis: capítulo 13, capítulo 14 y capítulo 15",
+    "Apocalipsis: capítulo 16, capítulo 17 y capitulo 18",
+    "Apocalipsis: capitulo 19 y capitulo 20",
+    "Apocalipsis: capítulo 21 y capitulo 22",
+    "Salmos: capítulo 1, capítulo 2, capitulo 3 y capítulo 4",
+    "Salmos: capítulo 5, capitulo 6, capitulo 7 y capítulo 8"
+   ]
+  }
  ]
 }

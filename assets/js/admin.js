@@ -208,7 +208,7 @@
     Promise.all([readJSON('data/eventos.json'), readJSON('data/boletines.json'), readJSON('data/lectura.json')]).then(function (r) {
       state.eventos = (r[0] && r[0].eventos) || [];
       state.boletines = r[1] || [];
-      state.lectura = r[2] || { desde: '', dias: [] };
+      state.lectura = weeksOf(r[2]);
       render();
     }).catch(function (e) {
       app.innerHTML = '<section class="adm-card"><p>' + esc(errText(e).replace('No se pudo guardar', 'No se pudieron cargar los datos')) + '</p><button class="adm-btn" data-action="retry">Intentar de nuevo</button></section>';
@@ -417,8 +417,14 @@
 
   // ---------- Lectura bíblica (weekly plan from the bulletin) ----------
   function nextMonday() { var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); return d; }
+  function weeksOf(data) {
+    var w = (data && data.semanas) || (data && data.dias ? [data] : []);
+    return w.slice().sort(function (a, b) { return a.desde.localeCompare(b.desde); });
+  }
   function renderLectura(panel) {
-    var L = state.lectura || { dias: [] };
+    var weeks = state.lectura || [];
+    // Start on the newest saved week (usually the one from the latest bulletin)
+    var L = weeks[weeks.length - 1] || { dias: [] };
     var DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
     var B = window.BIBLIA;
     panel.innerHTML = '<div class="adm-bar"><h2>Lectura bíblica de la semana</h2><a class="adm-btn ghost" href="../biblia/" target="_blank" rel="noopener">Ver la página</a></div>' +
@@ -431,8 +437,25 @@
       DAYS.map(function (d, i) {
         return '<label>' + d + '<input name="dia' + i + '" value="' + esc((L.dias || [])[i] || '') + '" autocomplete="off"><span class="adm-parse" data-for="dia' + i + '"></span></label>';
       }).join('') +
-      '<div class="adm-actions"><button class="adm-btn" type="submit">Guardar lectura</button></div></form>';
+      '<div class="adm-actions"><button class="adm-btn" type="submit">Guardar lectura</button></div></form>' +
+      '<section class="adm-card"><h3>Semanas guardadas</h3>' + (weeks.length ? '<ul class="adm-list">' + weeks.slice().reverse().map(function (w) {
+        var d = parseDate(w.desde), e = parseDate(w.desde); e.setDate(e.getDate() + 6);
+        return '<li><div class="adm-li-main"><strong>' + d.getDate() + ' de ' + MESES[d.getMonth()] + ' – ' + e.getDate() + ' de ' + MESES[e.getMonth()] + '</strong><span>' + esc((w.dias || []).filter(Boolean).slice(0, 2).join(' · ')) + '…</span></div>' +
+          '<div class="adm-li-act"><button type="button" class="adm-btn sm ghost" data-week="' + esc(w.desde) + '">Editar</button></div></li>';
+      }).join('') + '</ul>' : '<p class="adm-empty">Ninguna.</p>') + '<p class="adm-hint">La página muestra la semana de hoy. Se guardan las últimas 6 semanas.</p></section>';
     var form = $('#lecform');
+    function loadWeek(desde) {
+      var w = weeks.filter(function (x) { return x.desde === desde; })[0];
+      if (!w) return;
+      form.desde.value = w.desde;
+      form.boletin.value = w.boletin || '';
+      DAYS.forEach(function (d, i) { form['dia' + i].value = (w.dias || [])[i] || ''; preview(form['dia' + i]); });
+    }
+    form.desde.addEventListener('change', function () { loadWeek(form.desde.value); });
+    panel.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-week]');
+      if (b) { loadWeek(b.dataset.week); form.scrollIntoView({ behavior: 'smooth' }); }
+    });
     function preview(input) {
       var out = form.querySelector('[data-for="' + input.name + '"]');
       if (!input.value.trim()) { out.textContent = ''; out.className = 'adm-parse'; return true; }
@@ -452,9 +475,16 @@
       var data = { desde: form.desde.value, dias: dias };
       if (form.boletin.value) data.boletin = form.boletin.value;
       busy(btn, true);
-      commit([{ path: 'data/lectura.json', text: JSON.stringify(data, null, 1) + '\n' }], 'Lectura bíblica de la semana del ' + data.desde).then(function () {
-        state.lectura = data;
+      // Re-read, add or replace this week, keep the last 6 weeks
+      readJSON('data/lectura.json').then(function (cur) {
+        var list = weeksOf(cur).filter(function (w) { return w.desde !== data.desde; });
+        list.push(data);
+        list = weeksOf({ semanas: list }).slice(-6);
+        return commit([{ path: 'data/lectura.json', text: JSON.stringify({ semanas: list }, null, 1) + '\n' }], 'Lectura bíblica de la semana del ' + data.desde).then(function () { return list; });
+      }).then(function (list) {
+        state.lectura = list;
         busy(btn, false);
+        render();
         toast('✓ Lectura guardada. El sitio se actualizará en 1–2 minutos.', 'ok');
       }).catch(function (err) { busy(btn, false); toast(errText(err), 'error'); });
     });

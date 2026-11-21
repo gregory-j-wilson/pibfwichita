@@ -26,7 +26,21 @@
     return '<a class="bib-chip" href="' + esc(B.url(c.code, c.cap, c.vers)) + '" target="_blank" rel="noopener">' + esc(c.label) + EXT + '</a>';
   }
   var box = document.querySelector('.bib-week');
-  P.loadData('lectura.json').then(function (d) {
+  // data/lectura.json holds several weeks ({semanas: [...]}; an older file
+  // may be a single week). Show the week that contains today, else the most
+  // recent one that has started, else the first upcoming one.
+  function pickWeek(data) {
+    var weeks = (data && data.semanas) || (data && data.dias ? [data] : []);
+    var t = new Date(); t.setHours(0, 0, 0, 0);
+    weeks = weeks.slice().sort(function (a, b) { return a.desde.localeCompare(b.desde); });
+    var started = weeks.filter(function (w) { return P.parseDate(w.desde) <= t; });
+    var cur = started[started.length - 1];
+    if (cur) { var e = P.parseDate(cur.desde); e.setDate(e.getDate() + 6); if (e >= t) return cur; }
+    return weeks.filter(function (w) { return P.parseDate(w.desde) > t; })[0] || cur || { desde: '', dias: [] };
+  }
+  P.loadData('lectura.json').then(function (data) {
+    var d = pickWeek(data);
+    if (!d.desde) throw new Error('sin semanas');
     var start = P.parseDate(d.desde), today = new Date(); today.setHours(0, 0, 0, 0);
     var end = new Date(start); end.setDate(end.getDate() + 6);
     var rows = (d.dias || []).slice(0, 7).map(function (text, i) {
